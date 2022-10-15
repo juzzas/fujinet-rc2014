@@ -21,4 +21,5 @@ fnreset: apps/fnreset/fnreset.c
 
 
 clean:
-	rm -f *.dsk *.map *.bin *.ihx *.lis
+	rm -f *.dsk *.map *.bin *.ihx
+	find . -name "*.lis" -exec rm {} \;
