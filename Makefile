@@ -1,5 +1,5 @@
 TARGET=+rc2014
-SUB_TARGET=-subtype=cpm -Ihal/include @hal/hal_rc2014_cpm.lst
+SUB_TARGET=-subtype=cpm -Ilib/include @lib/lib_rc2014_cpm.lst
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
 #TARGET=+rc2014 -subtype=sio @hal/hal_rc2014_sio.lst
@@ -11,12 +11,12 @@ SUB_TARGET=-subtype=cpm -Ihal/include @hal/hal_rc2014_cpm.lst
 # -subtype=highram   Loads the program to C+D, screen into A+B
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 
-.PHONY: all clean
+.PHONY: all clean lib
 
-all: fntest
+all: fnreset
 
-fntest: fntest.c
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  fntest.c fujinet.c -o fntest -create-app
+fnreset: apps/fnreset/fnreset.c
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst -o fnreset -create-app
 
 
 

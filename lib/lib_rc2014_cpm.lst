@@ -1,0 +1,2 @@
+src/hal/cpm/hal.asm
+src/fujinet.c
