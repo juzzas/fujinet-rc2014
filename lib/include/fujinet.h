@@ -19,6 +19,14 @@ struct fujinet_dcb {
 #define DSTATS_RW 0xC0
 #define DSTATS_NO 0x00
 
+typedef enum {
+    FUJINET_RC_OK,
+    FUJINET_RC_INVALID,
+    FUJINET_RC_TIMEOUT,
+    FUJINET_RC_NO_ACK,
+    FUJINET_RC_NO_COMPLETE,
+} FUJINET_RC;
+
 
 /**
  * Initialse the Fujinet driver
@@ -41,6 +49,6 @@ uint8_t fujinet_checksum(uint8_t *buf, uint16_t len);
  *
  * @param dcb pointer to the device control block
  */
-void fujinet_dcb_exec(struct fujinet_dcb *dcb);
+FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb);
 
 

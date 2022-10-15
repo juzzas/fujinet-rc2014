@@ -32,7 +32,28 @@ uint8_t fujinet_checksum(uint8_t *buf, uint16_t len)
     return checksum;
 }
 
-void fujinet_dcb_exec(struct fujinet_dcb *dcb) {
+bool is_rx_avail(uint16_t timeout) {
+    int timeout_x10 = timeout * 10;
+    uint8_t avail = 0;
+
+    if (timeout) {
+        for (uint16_t i = 0; i < timeout_x10; i++) {
+            avail = fujinet_hal_rx_avail();
+
+            if (avail > 0)
+                break;
+
+            z80_delay_ms(100);
+        }
+    } else {
+        avail = fujinet_hal_rx_avail();
+    }
+
+    return (avail > 0);
+}
+
+FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) {
+    FUJINET_RC rc = FUJINET_RC_OK;
     command_frame frame;
 
     frame.header.device = dcb->device;
@@ -46,20 +67,15 @@ void fujinet_dcb_exec(struct fujinet_dcb *dcb) {
     for (uint8_t i = 0; i < sizeof(frame); i++)
         fujinet_hal_tx(frame.raw[i]);
 
-    for (uint16_t i = 0; i < (dcb->timeout * 10); i++) {
-        uint8_t rc = fujinet_hal_rx_avail();
-
-        if (rc > 0)
-            break;
-
-        z80_delay_ms(100);
+    if (!is_rx_avail(dcb->timeout)) {
+        rc = FUJINET_RC_TIMEOUT;
+        goto err_exit;
     }
 
     uint8_t ack = fujinet_hal_rx();
     if (ack != 'A') {
-        dcb->dstats = ack;
-        fujinet_hal_assert_cmd(false);
-        return;
+        rc = FUJINET_RC_NO_ACK;
+        goto err_exit;
     }
 
     if (dcb->dstats & DSTATS_W) {
@@ -69,11 +85,15 @@ void fujinet_dcb_exec(struct fujinet_dcb *dcb) {
         fujinet_hal_tx(fujinet_checksum(dcb->buffer, dcb->bytes));
     }
 
+    if (!is_rx_avail(dcb->timeout)) {
+        rc = FUJINET_RC_TIMEOUT;
+        goto err_exit;
+    }
+
     ack = fujinet_hal_rx();
     if (ack != 'A') {
-        dcb->dstats = ack;
-        fujinet_hal_assert_cmd(false);
-        return;
+        rc = FUJINET_RC_NO_ACK;
+        goto err_exit;
     }
 
     if (dcb->dstats & DSTATS_R) {
@@ -83,15 +103,21 @@ void fujinet_dcb_exec(struct fujinet_dcb *dcb) {
         uint8_t chk = fujinet_hal_rx();
     }
 
-    ack = fujinet_hal_rx();
-    if (ack != 'C') {
-        dcb->dstats = ack;
-        fujinet_hal_assert_cmd(false);
-        return;
+    if (!is_rx_avail(dcb->timeout)) {
+        rc = FUJINET_RC_TIMEOUT;
+        goto err_exit;
     }
 
-    dcb->dstats = 0;
+    ack = fujinet_hal_rx();
+    if (ack != 'C') {
+        rc = FUJINET_RC_NO_COMPLETE;
+        goto err_exit;
+    }
+
+err_exit:
     fujinet_hal_assert_cmd(false);
+
+    return rc;
 }
 
 

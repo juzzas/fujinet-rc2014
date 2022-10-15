@@ -27,7 +27,7 @@ void fujinet_hal_tx(uint8_t ch) __z88dk_fastcall;
  *
  * @return character inputted
  */
-uint8_t fujinet_hal_rx(void);
+uint8_t fujinet_hal_rx(void) __z88dk_fastcall;
 
 
 /**
@@ -35,7 +35,7 @@ uint8_t fujinet_hal_rx(void);
  *
  * @return characters waiting
  */
-uint8_t fujinet_hal_rx_avail(void);
+uint8_t fujinet_hal_rx_avail(void) __z88dk_fastcall;
 
 
 /**
