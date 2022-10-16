@@ -13,10 +13,13 @@ SUB_TARGET=-subtype=cpm -Ilib/include @lib/lib_rc2014_cpm.lst
 
 .PHONY: all clean lib
 
-all: fnreset
+all: fnreset fnwifi
 
 fnreset: apps/fnreset/fnreset.c
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst -o fnreset -create-app
+
+fnwifi: apps/fnsetup/main.c
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnsetup/fnsetup.lst -o fnsetup -create-app
 
 
 
