@@ -19,16 +19,16 @@ PUBLIC _fujinet_hal_init, _fujinet_hal_tx, _fujinet_hal_rx, _fujinet_hal_rx_avai
 ;void fujinet_hal_init(void);
 
 _fujinet_hal_init:
-            LD   A, 0b11001111
-            OUT  (PIO_CTRL_A), A  ;Port A = PIO 'control' mode
-            LD   A, 0b00000000
-            OUT  (PIO_CTRL_A),A   ;Port A = all lines are outputs
+    ld a, 0b11001111
+    out (PIO_CTRL_A), a   ;Port A = PIO 'control' mode
+    ld a, 0b00000000
+    out (PIO_CTRL_A),a    ;Port A = all lines are outputs
 
-            LD   A, 0b11111111
-            ld (assert_val), a
-            OUT  (PIO_DATA_A),A   ;Port A = all lines are "active low"
+    ld a, 0b11111111
+    ld (assert_val), a
+    out (PIO_DATA_A), a   ;Port A = all lines are "active low"
 
-            ret
+    ret
 
 
 ;;
@@ -37,9 +37,11 @@ _fujinet_hal_init:
 ;    L = byte
 _fujinet_hal_tx:
     push bc
+    push de
     ld c, 4     ; CP/M 3 A_READ (Returns A=byte)
-    ld a, l
+    ld e, l
     call BDOS
+    pop de
     pop bc
     ret
 
