@@ -1,5 +1,8 @@
 #include <stdint.h>
 
+#ifndef FUJINET_H
+#define FUJINET_H
+
 // FujiNet Device Control Block
 struct fujinet_dcb {
 	uint8_t device;
@@ -13,6 +16,8 @@ struct fujinet_dcb {
 	uint8_t aux1;
 	uint8_t aux2;
 };
+
+#define FUJINET_TIMEOUT 15
 
 #define DSTATS_R  0x40
 #define DSTATS_W  0x80
@@ -52,3 +57,4 @@ uint8_t fujinet_checksum(uint8_t *buf, uint16_t len);
 FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb);
 
 
+#endif /* FUJINET_H */

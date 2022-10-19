@@ -23,7 +23,31 @@
 #ifndef _UI_H
 #define _UI_H
 
-void ui_setup(void);
+#define MAX_MENU_OPTIONS  9
+#define MAX_SUBMENU_OPTIONS  9
+
+typedef void (*fnc_test)(void);
+
+struct ui_menu_option {
+    const char *name;
+    struct ui_submenu_option *suboptions;
+};
+
+struct ui_submenu_option {
+    const char *name;
+    fnc_test fnc;
+};
+
+
+struct ui_menu_context {
+    struct ui_menu_option *items;
+
+    char *select_title;
+    char *cancel_title;
+};
+
+
+void ui_set_menu(struct ui_menu_context *menu);
 void ui_tick(void);
 
 #endif

@@ -18,21 +18,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+*/
 
-#include "menu.h"
-#include "ui.h"
+#ifndef _MENU_H
+#define _MENU_H
+
+extern struct ui_menu_context main_menu;
 
 
-int main(void)
-{
-//    ui_set_menu(&main_menu);
-    menu_main_enter();
+void menu_main_enter(void);
 
-    while (1)
-    {
-        ui_tick();
-    }
-
-    return 0;
-}
+#endif

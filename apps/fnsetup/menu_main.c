@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Justin Skists.
+ * Copyright (c) 2022 Justin Skists.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,21 +18,47 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+*/
 
-#include "menu.h"
+#include <input.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+
 #include "ui.h"
 
 
-int main(void)
+/*
+ *     ______        _ _ _   __     __
+ *    / ____/_  __  (_|_) | / /__  / /_
+ *   / /_  / / / / / / /  |/ / _ \/ __/
+ *  / __/ / /_/ / / / / /|  /  __/ /_
+ * /_/    \__,_/_/ /_/_/ |_/\___/\__/
+ *            /___/
+ */
+
+
+static struct ui_submenu_option submenu_wifi[] = {
+    { "scan network", NULL },
+    { "connect", NULL },
+    { NULL, NULL },
+
+};
+
+static struct ui_menu_option menu[] =
 {
-//    ui_set_menu(&main_menu);
-    menu_main_enter();
+    { "Wifi Setup", submenu_wifi },
+    { NULL, NULL },
+};
 
-    while (1)
-    {
-        ui_tick();
-    }
 
-    return 0;
+struct ui_menu_context main_menu = {
+    menu,
+    "SELECT",
+    "QUIT"
+};
+
+
+void menu_main_enter(void) {
+    ui_set_menu(&main_menu);
 }
