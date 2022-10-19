@@ -37,6 +37,7 @@
 *.hex
 *.ihx
 *.bin
+*.com
 
 # Debug files
 *.dSYM/
