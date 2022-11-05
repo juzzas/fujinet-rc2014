@@ -133,7 +133,6 @@ void ui_set_menu(struct ui_menu_context *menu)
     ui_refresh_scr();
 }
 
-
 void ui_tick(void)
 {
     char ch = 0;

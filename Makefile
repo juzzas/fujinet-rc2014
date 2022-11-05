@@ -19,9 +19,12 @@ fnreset: apps/fnreset/fnreset.c
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst -o fnreset -create-app
 	cp fnreset.bin fnreset.com
 
-fnwifi: apps/fnsetup/main.c
+fnsetup: apps/fnsetup/main.c
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnsetup/fnsetup.lst -o fnsetup -create-app
 	cp fnsetup.bin fnsetup.com
+
+fnwifi: apps/fnsetup/main.c
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnsetup/fnsetup.lst -o fnsetup -create-app
 
 
 
