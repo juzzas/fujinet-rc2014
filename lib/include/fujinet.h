@@ -6,23 +6,17 @@
 // FujiNet Device Control Block
 struct fujinet_dcb {
 	uint8_t device;
-	uint8_t unit;
 	uint8_t command;
-	uint8_t dstats; // transfer direction on Input, status on output
-	uint8_t *buffer;
-	uint8_t timeout; // timeout in seconds
-	uint8_t reserved;
-	uint16_t bytes; // data length in bytes
-	uint8_t aux1;
-	uint8_t aux2;
+  uint8_t aux1;
+  uint8_t aux2;
+  uint8_t *buffer;
+  uint16_t buffer_bytes; // data length in bytes
+	uint8_t *response;
+  uint16_t response_bytes; // data length in bytes
+  uint8_t timeout;   // seconds
 };
 
 #define FUJINET_TIMEOUT 15
-
-#define DSTATS_R  0x40
-#define DSTATS_W  0x80
-#define DSTATS_RW 0xC0
-#define DSTATS_NO 0x00
 
 typedef enum {
     FUJINET_RC_OK,

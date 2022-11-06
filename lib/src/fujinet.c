@@ -1,9 +1,11 @@
 //
 // Created by jskists on 12/10/2022.
 //
-#include <z80.h>
 #include "fujinet.h"
 #include "fujinet_hal.h"
+#include <stdint.h>
+#include <stdlib.h>
+
 
 typedef union {
     struct frame
@@ -43,7 +45,7 @@ bool is_rx_avail(uint16_t timeout) {
             if (avail > 0)
                 break;
 
-            z80_delay_ms(100);
+            msleep(100);
         }
     } else {
         avail = fujinet_hal_rx_avail();
@@ -78,11 +80,11 @@ FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) {
         goto err_exit;
     }
 
-    if (dcb->dstats & DSTATS_W) {
-        for (uint8_t i = 0; i < dcb->bytes; i++)
+    if (dcb->buffer_bytes != 0) {
+        for (uint8_t i = 0; i < dcb->buffer_bytes; i++)
             fujinet_hal_tx(dcb->buffer[i]);
 
-        fujinet_hal_tx(fujinet_checksum(dcb->buffer, dcb->bytes));
+        fujinet_hal_tx(fujinet_checksum(dcb->buffer, dcb->buffer_bytes));
     }
 
     if (!is_rx_avail(dcb->timeout)) {
@@ -96,9 +98,9 @@ FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) {
         goto err_exit;
     }
 
-    if (dcb->dstats & DSTATS_R) {
-        for (uint8_t i = 0; i < dcb->bytes; i++)
-            dcb->buffer[i] = fujinet_hal_rx();
+    if (dcb->response_bytes != 0) {
+        for (uint8_t i = 0; i < dcb->response_bytes; i++)
+            dcb->response[i] = fujinet_hal_rx();
 
         uint8_t chk = fujinet_hal_rx();
     }
