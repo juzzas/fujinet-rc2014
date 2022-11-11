@@ -67,7 +67,7 @@ FUJINET_RC do_wifi_scan(void)
 
             rc = fujinet_get_scan_result(i, &info);
             if (rc == FUJINET_RC_OK) {
-                printf("SSID: [%ddB] %s\n", info.rssi, info.ssid);
+                printf("SSID: [%ddBm] %s\n", info.rssi, info.ssid);
             }
         }
     }
