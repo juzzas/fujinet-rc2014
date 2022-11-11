@@ -66,8 +66,12 @@ FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) {
 
     fujinet_hal_assert_cmd(true);
 
+    msleep(1000);
+
     for (uint8_t i = 0; i < sizeof(frame); i++)
         fujinet_hal_tx(frame.raw[i]);
+
+    fujinet_hal_assert_cmd(false);
 
     if (!is_rx_avail(dcb->timeout)) {
         rc = FUJINET_RC_TIMEOUT;
@@ -81,25 +85,30 @@ FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) {
     }
 
     if (dcb->buffer_bytes != 0) {
-        for (uint8_t i = 0; i < dcb->buffer_bytes; i++)
+        for (uint16_t i = 0; i < dcb->buffer_bytes; i++)
             fujinet_hal_tx(dcb->buffer[i]);
 
         fujinet_hal_tx(fujinet_checksum(dcb->buffer, dcb->buffer_bytes));
-    }
 
-    if (!is_rx_avail(dcb->timeout)) {
-        rc = FUJINET_RC_TIMEOUT;
-        goto err_exit;
-    }
+        if (!is_rx_avail(dcb->timeout)) {
+            rc = FUJINET_RC_TIMEOUT;
+            goto err_exit;
+        }
 
-    ack = fujinet_hal_rx();
-    if (ack != 'A') {
-        rc = FUJINET_RC_NO_ACK;
-        goto err_exit;
+        ack = fujinet_hal_rx();
+        if (ack != 'A') {
+            rc = FUJINET_RC_NO_ACK;
+            goto err_exit;
+        }
     }
 
     if (dcb->response_bytes != 0) {
-        for (uint8_t i = 0; i < dcb->response_bytes; i++)
+        if (!is_rx_avail(dcb->timeout)) {
+            rc = FUJINET_RC_TIMEOUT;
+            goto err_exit;
+        }
+
+        for (uint16_t i = 0; i < dcb->response_bytes; i++)
             dcb->response[i] = fujinet_hal_rx();
 
         uint8_t chk = fujinet_hal_rx();
