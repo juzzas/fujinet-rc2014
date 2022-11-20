@@ -1,4 +1,3 @@
-#ifdef BUILD_RC2014
 /**
  * CONFIG custom types
  */
@@ -7,7 +6,7 @@
 #define FUJI_TYPEDEFS_H
 
 #define FILE_MAXLEN 36
-#define SSID_MAXLEN 33 /* 32 + NULL */
+#define SSID_MAXLEN 32 /* 32 + NULL */
 
 #define MODE_READ 1
 #define MODE_WRITE 2
@@ -67,4 +66,3 @@ typedef struct
 } NewDisk;
 
 #endif /* FUJI_TYPEDEFS_H */
-#endif

@@ -10,6 +10,7 @@
 FUJINET_RC do_wifi_status(void)
 {
   uint8_t status_wifi;
+  NetConfig nc;
 
   FUJINET_RC rc = fujinet_get_wifi_status(&status_wifi);
   if (rc == FUJINET_RC_OK) {
@@ -29,8 +30,13 @@ FUJINET_RC do_wifi_status(void)
           break;
 
       case 3:
+      {
           printf("Connected to network, and active\n");
+          rc = fujinet_get_ssid(&nc);
+          if (rc == FUJINET_RC_OK)
+              printf("ssid: %s", nc.ssid);
           break;
+      }
 
       case 4:
           printf("Last connect failed\n");
@@ -51,6 +57,32 @@ FUJINET_RC do_wifi_status(void)
   }
 
   return rc;
+}
+
+FUJINET_RC do_wifi_set_ssid(char *ssid)
+{
+    char password[80];
+    uint8_t wifi_count;
+    uint8_t i;
+
+    printf("password: ");
+    fgets_cons(password, 80);
+
+    FUJINET_RC rc = fujinet_scan_for_networks(&wifi_count);
+    if (rc == FUJINET_RC_OK) {
+        printf("Found %d WiFi networks\n", wifi_count);
+
+        for (i = 0; i < wifi_count; i++) {
+            SSIDInfo info;
+
+            rc = fujinet_get_scan_result(i, &info);
+            if (rc == FUJINET_RC_OK) {
+                printf("SSID: [%ddBm] %s\n", info.rssi, info.ssid);
+            }
+        }
+    }
+
+    return rc;
 }
 
 FUJINET_RC do_wifi_scan(void)

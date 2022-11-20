@@ -66,8 +66,6 @@ FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) {
 
     fujinet_hal_assert_cmd(true);
 
-    msleep(1000);
-
     for (uint8_t i = 0; i < sizeof(frame); i++)
         fujinet_hal_tx(frame.raw[i]);
 
