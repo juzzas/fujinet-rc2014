@@ -2,6 +2,9 @@
 // Created by jskists on 16/11/2022.
 //
 
+#include "fuji_typedefs.h"
+#include "fujinet.h"
+
 #ifndef FUJINET_RC2014_FUJINET_NETWORK_H
 #define FUJINET_RC2014_FUJINET_NETWORK_H
 
