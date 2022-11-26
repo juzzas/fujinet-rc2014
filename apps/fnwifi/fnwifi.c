@@ -3,14 +3,17 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "fujinet.h"
 #include "fujinet_device.h"
 
+NetConfig nc;
+AdapterConfig adapter;
+
 FUJINET_RC do_wifi_status(void)
 {
   uint8_t status_wifi;
-  NetConfig nc;
 
   FUJINET_RC rc = fujinet_get_wifi_status(&status_wifi);
   if (rc == FUJINET_RC_OK) {
@@ -32,9 +35,13 @@ FUJINET_RC do_wifi_status(void)
       case 3:
       {
           printf("Connected to network, and active\n");
-          rc = fujinet_get_ssid(&nc);
-          if (rc == FUJINET_RC_OK)
-              printf("ssid: %s", nc.ssid);
+          rc = fujinet_get_adapter_config(&adapter);
+          if (rc == FUJINET_RC_OK) {
+              printf("ssid: %s\n", adapter.ssid);
+              printf("ip: %d.%d.%d.%d\n", adapter.localIP[0], adapter.localIP[1], adapter.localIP[2], adapter.localIP[3]);
+              printf("netmask: %d.%d.%d.%d\n", adapter.netmask[0], adapter.netmask[1], adapter.netmask[2], adapter.netmask[3]);
+              printf("gateway: %d.%d.%d.%d\n", adapter.gateway[0], adapter.gateway[1], adapter.gateway[2], adapter.gateway[3]);
+          }
           break;
       }
 
@@ -59,9 +66,9 @@ FUJINET_RC do_wifi_status(void)
   return rc;
 }
 
+char password[80];
 FUJINET_RC do_wifi_set_ssid(char *ssid)
 {
-    char password[80];
     uint8_t wifi_count;
     uint8_t i;
 

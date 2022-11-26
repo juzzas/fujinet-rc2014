@@ -6,9 +6,11 @@
 #include "fujinet.h"
 #include "fujinet_device.h"
 
+struct fujinet_dcb dcb = {};
+
 FUJINET_RC fujinet_device_reset(void)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
   dcb.device = 0x70;
   dcb.command = 0xFF; // reset FujiNet device
   dcb.aux1 = 0;
@@ -20,7 +22,7 @@ FUJINET_RC fujinet_device_reset(void)
 
 FUJINET_RC fujinet_get_wifi_status(uint8_t *status)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
   dcb.device = 0x70;
   dcb.command = 0xFA; // Get WiFi Status
   dcb.aux1 = 0;
@@ -33,7 +35,7 @@ FUJINET_RC fujinet_get_wifi_status(uint8_t *status)
 
 FUJINET_RC fujinet_get_ssid(NetConfig *nc)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xFE;
@@ -46,7 +48,7 @@ FUJINET_RC fujinet_get_ssid(NetConfig *nc)
 
 FUJINET_RC fujinet_scan_for_networks(uint8_t *count)
 {
-    struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
     dcb.device = 0x70;
     dcb.command = 0xFD; // Scan for networks
     dcb.aux1 = 0;
@@ -60,7 +62,7 @@ FUJINET_RC fujinet_scan_for_networks(uint8_t *count)
 
 FUJINET_RC fujinet_get_scan_result(uint8_t n, SSIDInfo *info)
 {
-    struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
     dcb.device = 0x70;
     dcb.command = 0xFC; // Scan for networks
     dcb.aux1 = n;
@@ -72,9 +74,9 @@ FUJINET_RC fujinet_get_scan_result(uint8_t n, SSIDInfo *info)
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_get_adaptor_config(AdapterConfig *ac)
+FUJINET_RC fujinet_get_adapter_config(AdapterConfig *ac)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
   dcb.device = 0x70;
   dcb.command = 0xE8; // Get adaptor config
   dcb.timeout = FUJINET_TIMEOUT;
@@ -86,7 +88,7 @@ FUJINET_RC fujinet_get_adaptor_config(AdapterConfig *ac)
 
 FUJINET_RC fujinet_set_ssid(NetConfig *nc)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xFB;
@@ -99,7 +101,7 @@ FUJINET_RC fujinet_set_ssid(NetConfig *nc)
 
 FUJINET_RC fujinet_get_device_slots(DeviceSlot *d)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF2;
@@ -112,7 +114,7 @@ FUJINET_RC fujinet_get_device_slots(DeviceSlot *d)
 
 FUJINET_RC fujinet_get_host_slots(HostSlot *h)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF4;
@@ -125,7 +127,7 @@ FUJINET_RC fujinet_get_host_slots(HostSlot *h)
 
 FUJINET_RC fujinet_put_host_slots(HostSlot *h)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF3;
@@ -138,7 +140,7 @@ FUJINET_RC fujinet_put_host_slots(HostSlot *h)
 
 FUJINET_RC fujinet_put_device_slots(DeviceSlot *d)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF1;
@@ -151,7 +153,7 @@ FUJINET_RC fujinet_put_device_slots(DeviceSlot *d)
 
 FUJINET_RC fujinet_mount_host_slot(unsigned char hs)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF9;
@@ -163,7 +165,7 @@ FUJINET_RC fujinet_mount_host_slot(unsigned char hs)
 
 FUJINET_RC fujinet_open_directory(unsigned char hs, char *p, char *f)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
   char c[258];
   char *e;
 
@@ -192,7 +194,7 @@ FUJINET_RC fujinet_open_directory(unsigned char hs, char *p, char *f)
 
 FUJINET_RC fujinet_read_directory(char *dirent, unsigned char l, unsigned char a)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF6;
@@ -207,7 +209,7 @@ FUJINET_RC fujinet_read_directory(char *dirent, unsigned char l, unsigned char a
 
 FUJINET_RC fujinet_close_directory(void)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xF5;
@@ -218,7 +220,7 @@ FUJINET_RC fujinet_close_directory(void)
 
 FUJINET_RC fujinet_set_directory_position(DirectoryPosition pos)
 {
-  struct fujinet_dcb dcb = {};
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
   dcb.device = 0x70;
   dcb.command = 0xE4;

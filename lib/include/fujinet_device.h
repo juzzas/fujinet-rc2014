@@ -49,7 +49,7 @@ FUJINET_RC fujinet_get_scan_result(uint8_t n, SSIDInfo *info);
  * @param ac [OUT]
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_get_adaptor_config(AdapterConfig *ac);
+FUJINET_RC fujinet_get_adapter_config(AdapterConfig *ac);
 
 /**
  * Set WiFi SSID and password

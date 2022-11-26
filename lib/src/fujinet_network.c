@@ -7,22 +7,23 @@
 
 unsigned char nunit(char* devicespec)
 {
-  unsigned char unit=1;
+    unsigned char unit = 1;
 
-  // Set unit to 1 unless explicitly specified.
-  if (devicespec[1]==':')
-    unit=1;
-  else if (devicespec[2]==':')
-    unit=devicespec[1]-0x30; // convert from alpha to integer.
-  else
-    unit=1;
+    // Set unit to 1 unless explicitly specified.
+    if (devicespec[1] == ':') {
+        unit = 1;
+    } else if (devicespec[2] == ':') {
+        unit = devicespec[1] - 0x30; // convert from alpha to integer.
+    } else {
+        unit = 1;
+    }
 
-  return unit;
+    return unit;
 }
 
 FUJINET_RC fujinet_network_open(char* devicespec, unsigned char trans)
 {
-  unsigned char unit=nunit(devicespec);
+  unsigned char unit = nunit(devicespec);
   struct fujinet_dcb dcb = {};
 
   dcb.device    = 0x70 + unit;      // Fuji Device Identifier
@@ -38,7 +39,7 @@ FUJINET_RC fujinet_network_open(char* devicespec, unsigned char trans)
 
 FUJINET_RC fujinet_network_close(char* devicespec)
 {
-  unsigned char unit=nunit(devicespec);
+  unsigned char unit = nunit(devicespec);
   struct fujinet_dcb dcb = {};
 
   dcb.device    = 0x70 + unit;      // Fuji Device Identifier
@@ -50,7 +51,7 @@ FUJINET_RC fujinet_network_close(char* devicespec)
 
 unsigned char fujinet_network_status(char* devicespec, struct network_status *status)
 {
-  unsigned char unit=nunit(devicespec);
+  unsigned char unit = nunit(devicespec);
   struct fujinet_dcb dcb = {};
 
   dcb.device    = 0x70 + unit;      // Fuji Device Identifier
@@ -62,88 +63,64 @@ unsigned char fujinet_network_status(char* devicespec, struct network_status *st
   return fujinet_dcb_exec(&dcb);
 }
 
-unsigned char fujinet_network_read(char* devicespec, unsigned char* buf, unsigned short len)
+unsigned char fujinet_network_read(char* devicespec, uint8_t* buf, uint16_t len)
 {
-  unsigned char unit=nunit(devicespec);
+    unsigned char unit = nunit(devicespec);
+    struct fujinet_dcb dcb = {};
 
-  OS.dcb.ddevic   = DFUJI;
-  OS.dcb.dunit    = unit;
-  OS.dcb.dcomnd   = 'R';    // read
-  OS.dcb.dstats   = DREAD;
-  OS.dcb.dbuf     = buf;
-  OS.dcb.dtimlo   = TIMEOUT;
-  OS.dcb.dbyt     = OS.dcb.daux = len; // Set the buffer size AND daux with length
-  siov();
+    dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+    dcb.command   = 'R';        // Read
+    dcb.response  = status;
+    dcb.response_bytes = len;
+    dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
+    dcb.aux1 = len & 0xff;
+    dcb.aux2 = (len >> 8) & 0xff;
 
-  if (OS.dcb.dstats!=SUCCESS)
-  {
-    // something went wrong
-    // do we need to return extended status?
-    if (OS.dcb.dstats==DERROR)
-    {
-      nstatus(devicespec);
-      return OS.dvstat[DVSTAT_EXTENDED_ERROR]; // return extended error.
-    }
-  }
-  return OS.dcb.dstats; // Return SIO error or success.
+    return fujinet_dcb_exec(&dcb);
 }
 
-unsigned char fujinet_network_write(char* devicespec, unsigned char* buf, unsigned short len)
+unsigned char fujinet_network_write(char* devicespec, uint8_t* buf, uint16_t len)
 {
-  unsigned char unit=nunit(devicespec);
+    unsigned char unit = nunit(devicespec);
+    struct fujinet_dcb dcb = {};
 
-  OS.dcb.ddevic   = DFUJI;
-  OS.dcb.dunit    = unit;
-  OS.dcb.dcomnd   = 'W';    // write
-  OS.dcb.dstats   = DWRITE;
-  OS.dcb.dbuf     = buf;
-  OS.dcb.dtimlo   = TIMEOUT;
-  OS.dcb.dbyt     = OS.dcb.daux = len;
-  siov();
+    dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+    dcb.command   = 'W';        // Write
+    dcb.buffer  = status;
+    dcb.buff_bytes = len;
+    dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
+    dcb.aux1 = len & 0xff;
+    dcb.aux2 = (len >> 8) & 0xff;
 
-  if (OS.dcb.dstats!=SUCCESS)
-  {
-    // something went wrong
-    // do we need to return extended status?
-    if (OS.dcb.dstats==DERROR)
-    {
-      nstatus(devicespec);
-      return OS.dvstat[DVSTAT_EXTENDED_ERROR]; // return extended error.
-    }
-  }
-  return OS.dcb.dstats; // Return SIO error or success.
+    return fujinet_dcb_exec(&dcb);
 }
 
-unsigned char fujinet_network_login(char* devicespec, char *login, char *password)
+unsigned char fujinet_network_login(char* devicespec, char* login, char* password)
 {
-  unsigned char unit=nunit(devicespec);
+    unsigned char unit = nunit(devicespec);
+    struct fujinet_dcb dcb = {};
 
-  OS.dcb.ddevic=0x71;
-  OS.dcb.dunit=unit;
-  OS.dcb.dcomnd=0xFD;
-  OS.dcb.dstats=0x80;
-  OS.dcb.dbuf=login;
-  OS.dcb.dtimlo=0x1f;
-  OS.dcb.dbyt=256;
-  OS.dcb.daux=0;
-  siov();
+    dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+    dcb.command   = 0xFD;        // send login
+    dcb.buffer  = login;
+    dcb.buff_bytes = 256;
+    dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
+    dcb.aux1 = len & 0xff;
+    dcb.aux2 = (len >> 8) & 0xff;
 
-  if (OS.dcb.dstats!=1)
-  {
-    nstatus(devicespec);
-    return OS.dvstat[DVSTAT_EXTENDED_ERROR]; // return ext err
-  }
+    rc = fujinet_dcb_exec(&dcb);
 
-  OS.dcb.dcomnd=0xFE;
-  OS.dcb.dstats=0x80;
-  OS.dcb.dbuf=password;
-  siov();
+    if (rc == FUJINET_RC_OK) {
+        dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+        dcb.command   = 0xFE;        // send password
+        dcb.buffer  = password;
+        dcb.buff_bytes = 256;
+        dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
+        dcb.aux1 = len & 0xff;
+        dcb.aux2 = (len >> 8) & 0xff;
 
-  if (OS.dcb.dstats!=1)
-  {
-    nstatus(devicespec);
-    return OS.dvstat[DVSTAT_EXTENDED_ERROR]; // return ext err
-  }
+        rc = fujinet_dcb_exec(&dcb);
+    }
 
-  return OS.dcb.dstats;
+    return rc;
 }

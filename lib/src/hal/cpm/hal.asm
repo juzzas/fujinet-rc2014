@@ -40,7 +40,11 @@ _fujinet_hal_tx:
     push de
     ld c, 4     ; CP/M 3 A_READ (Returns A=byte)
     ld e, l
+    push ix
+    push iy
     call BDOS
+    pop iy
+    pop ix
     pop de
     pop bc
     ret
@@ -52,7 +56,13 @@ _fujinet_hal_tx:
 _fujinet_hal_rx:
     push bc
     ld c, 3    ; CP/M A_READ (Returns A=byte)
+    push de
+    push ix
+    push iy
     call BDOS
+    pop iy
+    pop ix
+    pop de
     ld l, a
     pop bc
     ret
@@ -64,7 +74,13 @@ _fujinet_hal_rx:
 _fujinet_hal_rx_avail:
     push bc
     ld c, 7     ; CP/M 3 A_STATIN (Returns A=0 or 0FFh)
+    push de
+    push ix
+    push iy
     call BDOS
+    pop iy
+    pop ix
+    pop de
     or a
     jr nz, rx_avail_yes
 

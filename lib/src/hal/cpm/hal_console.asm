@@ -18,7 +18,13 @@ _console_tx:
     push bc
     ld c, 2     ; CP/M 3 C_WRITE (Returns A=byte)
     ld a, l
+    push de
+    push ix
+    push iy
     call BDOS
+    pop iy
+    pop ix
+    pop de
     pop bc
     ret
 
@@ -29,7 +35,13 @@ _console_tx:
 _console_rx:
     push bc
     ld c, 1    ; CP/M C_READ (Returns A=byte)
+    push de
+    push ix
+    push iy
     call BDOS
+    pop iy
+    pop ix
+    pop de
     ld l, a
     pop bc
     ret
@@ -41,7 +53,13 @@ _console_rx:
 _console_rx_avail:
     push bc
     ld c, 11     ; CP/M 3 C_STATUS (Returns A=0 or 0FFh)
+    push de
+    push ix
+    push iy
     call BDOS
+    pop iy
+    pop ix
+    pop de
     or a
     jr nz, rx_avail_yes
 
@@ -64,9 +82,13 @@ _console_puts:
     push bc
     push de
     push hl
+    push ix
+    push iy
     ld c, 2     ; CP/M 3 C_WRITE (Returns A=byte)
     ld e, a
     call BDOS
+    pop iy
+    pop ix
     pop hl
     pop de
     pop bc
