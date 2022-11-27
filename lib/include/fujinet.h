@@ -1,19 +1,20 @@
 #include <stdint.h>
+#include "fuji_typedefs.h"
 
 #ifndef FUJINET_H
 #define FUJINET_H
 
 // FujiNet Device Control Block
 struct fujinet_dcb {
-	uint8_t device;
-	uint8_t command;
-  uint8_t aux1;
-  uint8_t aux2;
-  uint8_t *buffer;
-  uint16_t buffer_bytes; // data length in bytes
-	uint8_t *response;
-  uint16_t response_bytes; // data length in bytes
-  uint8_t timeout;   // seconds
+    uint8_t device;
+    uint8_t command;
+    uint8_t aux1;
+    uint8_t aux2;
+    uint8_t *buffer;
+    uint16_t buffer_bytes; // data length in bytes
+    uint8_t *response;
+    uint16_t response_bytes; // data length in bytes
+    uint8_t timeout;   // seconds
 };
 
 #define FUJINET_TIMEOUT 15

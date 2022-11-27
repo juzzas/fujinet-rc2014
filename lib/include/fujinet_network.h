@@ -61,7 +61,7 @@ FUJINET_RC fujinet_network_close(char* devicespec);
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_status(char* devicespec);
+FUJINET_RC fujinet_network_status(char* devicespec, struct network_status *status);
 
 /**
  * Read # of bytes from specific N: device.
