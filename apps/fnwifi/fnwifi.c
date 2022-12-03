@@ -2,7 +2,7 @@
  * FujiNet Wifi tool
  */
 
-#include <stdio.h>
+#include <conio.h>
 #include <string.h>
 
 #include "fujinet.h"
@@ -17,30 +17,30 @@ FUJINET_RC do_wifi_status(void)
 
   FUJINET_RC rc = fujinet_get_wifi_status(&status_wifi);
   if (rc == FUJINET_RC_OK) {
-      printf("WiFi status (%d): ", status_wifi);
+      cprintf("WiFi status (%d): ", status_wifi);
 
       switch (status_wifi) {
       case 0:
-          printf("WIFI is idle\n");
+          cprintf("WIFI is idle\n");
           break;
 
       case 1:
-          printf("No SSID Available\n");
+          cprintf("No SSID Available\n");
           break;
 
       case 2:
-          printf("Scan complete\n");
+          cprintf("Scan complete\n");
           break;
 
       case 3:
       {
-          printf("Connected to network, and active\n");
+          cprintf("Connected to network, and active\n");
           rc = fujinet_get_adapter_config(&adapter);
           if (rc == FUJINET_RC_OK) {
-              printf("ssid: %s\n", adapter.ssid);
-              printf("ip: %d.%d.%d.%d\n", adapter.localIP[0], adapter.localIP[1], adapter.localIP[2], adapter.localIP[3]);
-              printf("netmask: %d.%d.%d.%d\n", adapter.netmask[0], adapter.netmask[1], adapter.netmask[2], adapter.netmask[3]);
-              printf("gateway: %d.%d.%d.%d\n", adapter.gateway[0], adapter.gateway[1], adapter.gateway[2], adapter.gateway[3]);
+              cprintf("ssid: %s\n", adapter.ssid);
+              cprintf("ip: %d.%d.%d.%d\n", adapter.localIP[0], adapter.localIP[1], adapter.localIP[2], adapter.localIP[3]);
+              cprintf("netmask: %d.%d.%d.%d\n", adapter.netmask[0], adapter.netmask[1], adapter.netmask[2], adapter.netmask[3]);
+              cprintf("gateway: %d.%d.%d.%d\n", adapter.gateway[0], adapter.gateway[1], adapter.gateway[2], adapter.gateway[3]);
           }
           break;
       }
@@ -77,14 +77,14 @@ FUJINET_RC do_wifi_set_ssid(char *ssid)
 
     FUJINET_RC rc = fujinet_scan_for_networks(&wifi_count);
     if (rc == FUJINET_RC_OK) {
-        printf("Found %d WiFi networks\n", wifi_count);
+        cprintf("Found %d WiFi networks\n", wifi_count);
 
         for (i = 0; i < wifi_count; i++) {
             SSIDInfo info;
 
             rc = fujinet_get_scan_result(i, &info);
             if (rc == FUJINET_RC_OK) {
-                printf("SSID: [%ddBm] %s\n", info.rssi, info.ssid);
+                cprintf("SSID: [%ddBm] %s\n", info.rssi, info.ssid);
             }
         }
     }
@@ -99,14 +99,14 @@ FUJINET_RC do_wifi_scan(void)
 
     FUJINET_RC rc = fujinet_scan_for_networks(&wifi_count);
     if (rc == FUJINET_RC_OK) {
-        printf("Found %d WiFi networks\n", wifi_count);
+        cprintf("Found %d WiFi networks\n", wifi_count);
 
         for (i = 0; i < wifi_count; i++) {
             SSIDInfo info;
 
             rc = fujinet_get_scan_result(i, &info);
             if (rc == FUJINET_RC_OK) {
-                printf("SSID: [%ddBm] %s\n", info.rssi, info.ssid);
+                cprintf("SSID: [%ddBm] %s\n", info.rssi, info.ssid);
             }
         }
     }
@@ -116,7 +116,7 @@ FUJINET_RC do_wifi_scan(void)
 
 int main(int argc, char **argv)
 {
-  printf("FujiNet module - WiFi\n");
+  cprintf("FujiNet module - WiFi\n");
 
   fujinet_init();
 
@@ -131,15 +131,15 @@ int main(int argc, char **argv)
   }
   switch (rc) {
     case FUJINET_RC_OK:
-        printf("done\n");
+        cprintf("done\n");
         break;
 
       case FUJINET_RC_TIMEOUT:
-          printf("Timed out!\n");
+          cprintf("Timed out!\n");
           break;
 
     case FUJINET_RC_INVALID:
-        printf("Invalid parameter!\n");
+        cprintf("Invalid parameter!\n");
         break;
 
     default:
