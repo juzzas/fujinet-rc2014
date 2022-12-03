@@ -43,7 +43,7 @@ struct network_status
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_open(char* devicespec, unsigned char trans);
+FUJINET_RC fujinet_network_open(const char* devicespec, unsigned char trans);
 
 /**
  * Close N: device with devicespec
@@ -52,7 +52,7 @@ FUJINET_RC fujinet_network_open(char* devicespec, unsigned char trans);
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_close(char* devicespec);
+FUJINET_RC fujinet_network_close(const char* devicespec);
 
 /**
  * Get status of specific N: device
@@ -61,7 +61,7 @@ FUJINET_RC fujinet_network_close(char* devicespec);
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_status(char* devicespec, struct network_status *status);
+FUJINET_RC fujinet_network_status(const char* devicespec, struct network_status *status);
 
 /**
  * Read # of bytes from specific N: device.
@@ -72,7 +72,7 @@ FUJINET_RC fujinet_network_status(char* devicespec, struct network_status *statu
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_read(char* devicespec, uint8_t* buf, uint16_t len);
+FUJINET_RC fujinet_network_read(const char* devicespec, uint8_t* buf, uint16_t len);
 
 /**
  * Write # of bytes to specific N: device.
@@ -83,7 +83,7 @@ FUJINET_RC fujinet_network_read(char* devicespec, uint8_t* buf, uint16_t len);
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_write(char* devicespec, uint8_t* buf, uint16_t len);
+FUJINET_RC fujinet_network_write(const char* devicespec, uint8_t* buf, uint16_t len);
 
 /**
  * Send username and password credentials
@@ -94,6 +94,24 @@ FUJINET_RC fujinet_network_write(char* devicespec, uint8_t* buf, uint16_t len);
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_network_login(char* devicespec, char* login, char* password);
+FUJINET_RC fujinet_network_login(const char* devicespec, char* login, char* password);
+
+FUJINET_RC fujinet_channel_mode(const char* devicespec, uint8_t mode);
+
+/**
+ * Query the JSON parser to return specific pieces of information specified by
+ * the query string. The query string is formally defined in the JSON Query
+ * Format. The size of this query string is always 256 bytes, and should be
+ * terminated by a 0.
+ */
+FUJINET_RC fujinet_json_query(const char* devicespec, uint8_t* buf, uint16_t len);
+
+/**
+ * Query the JSON parser to return specific pieces of information specified by
+ * the query string. The query string is formally defined in the JSON Query
+ * Format. The size of this query string is always 256 bytes, and should be
+ * terminated by a 0.
+ */
+FUJINET_RC fujinet_json_parse(const char* devicespec);
 
 #endif //FUJINET_RC2014_FUJINET_NETWORK_H
