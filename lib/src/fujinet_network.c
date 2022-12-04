@@ -10,7 +10,7 @@
 
 extern struct fujinet_dcb dcb;
 
-unsigned char nunit(const char* devicespec)
+unsigned char nunit(char* devicespec)
 {
     unsigned char unit = 1;
 
@@ -26,7 +26,7 @@ unsigned char nunit(const char* devicespec)
     return unit;
 }
 
-FUJINET_RC fujinet_network_open(const char* devicespec, unsigned char trans)
+FUJINET_RC fujinet_network_open(char* devicespec, unsigned char trans)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -42,7 +42,7 @@ FUJINET_RC fujinet_network_open(const char* devicespec, unsigned char trans)
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_network_close(const char* devicespec)
+FUJINET_RC fujinet_network_close(char* devicespec)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -54,7 +54,7 @@ FUJINET_RC fujinet_network_close(const char* devicespec)
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_network_status(const char* devicespec, struct network_status *status)
+FUJINET_RC fujinet_network_status(char* devicespec, struct network_status *status)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -68,7 +68,7 @@ FUJINET_RC fujinet_network_status(const char* devicespec, struct network_status 
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_network_read(const char* devicespec, uint8_t* buf, uint16_t len)
+FUJINET_RC fujinet_network_read(char* devicespec, uint8_t* buf, uint16_t len)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -84,7 +84,7 @@ FUJINET_RC fujinet_network_read(const char* devicespec, uint8_t* buf, uint16_t l
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_network_write(const char* devicespec, uint8_t* buf, uint16_t len)
+FUJINET_RC fujinet_network_write(char* devicespec, uint8_t* buf, uint16_t len)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -100,7 +100,7 @@ FUJINET_RC fujinet_network_write(const char* devicespec, uint8_t* buf, uint16_t 
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_network_login(const char* devicespec, char* login, char* password)
+FUJINET_RC fujinet_network_login(char* devicespec, char* login, char* password)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -125,7 +125,7 @@ FUJINET_RC fujinet_network_login(const char* devicespec, char* login, char* pass
     return rc;
 }
 
-FUJINET_RC fujinet_channel_mode(const char* devicespec, uint8_t mode)
+FUJINET_RC fujinet_channel_mode(char* devicespec, uint8_t mode)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -134,12 +134,12 @@ FUJINET_RC fujinet_channel_mode(const char* devicespec, uint8_t mode)
     dcb.command   = 0xFC;        // set channel mode
     dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
     dcb.aux1     = OUPDATE;    // Read and write
-    dcb.aux2     = 0;      // CR/LF translation
+    dcb.aux2     = mode;      // Channel mode
 
     return fujinet_dcb_exec(&dcb);
 }
 
-FUJINET_RC fujinet_json_query(const char* devicespec, uint8_t* buf, uint16_t len)
+FUJINET_RC fujinet_json_query(char* devicespec, uint8_t* buf, uint16_t len)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
@@ -156,7 +156,7 @@ FUJINET_RC fujinet_json_query(const char* devicespec, uint8_t* buf, uint16_t len
 }
 
 
-FUJINET_RC fujinet_json_parse(const char* devicespec)
+FUJINET_RC fujinet_json_parse(char* devicespec)
 {
     unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));

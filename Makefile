@@ -1,5 +1,6 @@
 TARGET=+cpm
-SUB_TARGET=-Ilib/include @lib/lib_rc2014_cpm.lst
+#SUB_TARGET=-Ilib/include @lib/lib_rc2014_cpm.lst
+SUB_TARGET=-Ilib/include
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
 #TARGET=+rc2014 -subtype=sio @hal/hal_rc2014_sio.lst
@@ -24,6 +25,12 @@ fnsetup:
 
 fnwifi:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnwifi/fnwifi.lst -o fnwifi.com -create-app
+
+jsontest:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/jsontest/jsontest.lst @lib/lib_rc2014_cpm.lst -o jsontest.com -create-app
+
+wget:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/wget/wget.lst @lib/lib_rc2014_cpm.lst -o wget.com -create-app
 
 
 
