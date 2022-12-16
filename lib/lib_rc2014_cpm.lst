@@ -4,3 +4,4 @@ src/fujinet.c
 src/fujinet_device.c
 src/fujinet_modem.c
 src/fujinet_network.c
+src/fujinet_printer.c

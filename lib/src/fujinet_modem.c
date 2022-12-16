@@ -9,14 +9,14 @@
 
 extern struct fujinet_dcb dcb;
 
-FUJINET_RC fujinet_modem_stream(uint8_t modem_id)
+FUJINET_RC fujinet_modem_stream(uint8_t modem_unit)
 {
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    if (modem_id > MAX_MODEM_ID)
+    if (modem_unit > MAX_MODEM_UNIT)
         return FUJINET_RC_INVALID;
 
-    dcb.device = 0x50 + modem_id;
+    dcb.device = 0x50 + modem_unit;
     dcb.command = 'X';
     dcb.timeout = 15;
 

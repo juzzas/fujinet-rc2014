@@ -15,22 +15,25 @@ SUB_TARGET=-Ilib/include
 
 .PHONY: all clean lib fnreset fnwifi
 
-all: fnreset fnwifi
+all: fnreset fnwifi fnstream
 
 fnreset:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst -o fnreset.com -create-app
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst @lib/lib_rc2014_cpm.lst -o fnreset.com -create-app
 
 fnsetup:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnsetup/fnsetup.lst -o fnsetup.com -create-app
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnsetup/fnsetup.lst @lib/lib_rc2014_cpm.lst -o fnsetup.com -create-app
 
 fnwifi:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnwifi/fnwifi.lst -o fnwifi.com -create-app
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnwifi/fnwifi.lst @lib/lib_rc2014_cpm.lst -o fnwifi.com -create-app
 
 jsontest:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/jsontest/jsontest.lst @lib/lib_rc2014_cpm.lst -o jsontest.com -create-app
 
 wget:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/wget/wget.lst @lib/lib_rc2014_cpm.lst -o wget.com -create-app
+
+fnstream:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnstream/fnstream.lst @lib/lib_rc2014_cpm.lst -o fnstream.com -create-app
 
 
 

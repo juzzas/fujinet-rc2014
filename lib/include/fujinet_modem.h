@@ -8,8 +8,8 @@
 #ifndef FUJINET_RC2014_FUJINET_MODEM_H
 #define FUJINET_RC2014_FUJINET_MODEM_H
 
-#define MAX_MODEM_ID  3
+#define MAX_MODEM_UNIT  3
 
-FUJINET_RC fujinet_modem_stream(uint8_t modem_id);
+FUJINET_RC fujinet_modem_stream(uint8_t modem_unit);
 
 #endif //FUJINET_RC2014_FUJINET_MODEM_H
