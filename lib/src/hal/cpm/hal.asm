@@ -11,14 +11,25 @@ DEFC PIO_CTRL_B = 0x6b
 
 DEFC BDOS = 0x0005
 
+DEFC BDOS_A_READ = 3
+DEFC BDOS_A_WRITE = 4
+DEFC BDOS_A_STATIN = 7
+
 SECTION code_user
 
-PUBLIC _fujinet_hal_init, _fujinet_hal_tx, _fujinet_hal_rx, _fujinet_hal_rx_avail, _fujinet_hal_assert_cmd
+PUBLIC fujinet_hal_init
+PUBLIC fujinet_hal_tx
+PUBLIC fujinet_hal_rx
+PUBLIC fujinet_hal_rx_avail
+PUBLIC fujinet_hal_rx_avail_timeout
+PUBLIC fujinet_hal_assert_cmd
+
+EXTERN msleep
 
 ;;Initialised the FujiNet hardware
 ;void fujinet_hal_init(void);
 
-_fujinet_hal_init:
+fujinet_hal_init:
     ld a, 0b11001111
     out (PIO_CTRL_A), a   ;Port A = PIO 'control' mode
     ld a, 0b00000000
@@ -34,12 +45,13 @@ _fujinet_hal_init:
 ;;
 ;void fujinet_hal_tx(uint8_t ch);
 ; entry:
-;    L = byte
-_fujinet_hal_tx:
+;    A = byte
+fujinet_hal_tx:
+    push hl
     push bc
     push de
-    ld c, 4     ; CP/M 3 A_READ (Returns A=byte)
-    ld e, l
+    ld c, BDOS_A_WRITE     ; CP/M 3 A_WRITE (Returns A=byte)
+    ld e, a
     push ix
     push iy
     call BDOS
@@ -47,33 +59,55 @@ _fujinet_hal_tx:
     pop ix
     pop de
     pop bc
+    pop hl
     ret
 
 
 ;; Input byte from FujiNet device
 ; exit:
-;    L = byte
-_fujinet_hal_rx:
+;    A = byte
+fujinet_hal_rx:
+    push hl
     push bc
-    ld c, 3    ; CP/M A_READ (Returns A=byte)
+    ld c, BDOS_A_READ    ; CP/M A_READ (Returns A=byte)
     push de
     push ix
     push iy
-    call BDOS
+    call BDOS ; (A = rx byte)
     pop iy
     pop ix
     pop de
-    ld l, a
     pop bc
+    pop hl
     ret
+
+
+; ENTRY: DE = timeout in 10ths of seconds
+; EXIT:   A = bytes in buffer
+
+fujinet_hal_rx_avail_timeout:
+    call fujinet_hal_rx_avail
+    cp 0
+    ret nz
+
+    ;timer timed out?
+    ld a, d
+    or e
+    ret z ; (A = 0, here)
+
+    ld hl, 100
+    call msleep
+    dec de
+    jr fujinet_hal_rx_avail_timeout
 
 
 ;; Number of bytes available in receive buffer
 ; exit:
-;    L = number of bytes in buffer
-_fujinet_hal_rx_avail:
+;    A = number of bytes in buffer
+fujinet_hal_rx_avail:
+    push hl
     push bc
-    ld c, 7     ; CP/M 3 A_STATIN (Returns A=0 or 0FFh)
+    ld c, BDOS_A_STATIN     ; CP/M 3 A_STATIN (Returns A=0 or 0FFh)
     push de
     push ix
     push iy
@@ -85,21 +119,22 @@ _fujinet_hal_rx_avail:
     jr nz, rx_avail_yes
 
 rx_avail_no:
-    ld l, 0
+    ld a, 0
     pop bc
+    pop hl
     ret
 
 rx_avail_yes:
-    ld l, 1   ; let's just say that there is only one byte.
+    ld a, 1   ; let's just say that there is only one byte.
     pop bc
+    pop hl
     ret
 
 
 ;; Assert the COMMAND line
 ; entry:
-;    L = assert
-_fujinet_hal_assert_cmd:
-    ld a, l
+;    A = assert
+fujinet_hal_assert_cmd:
     cp 0
     jr nz, do_assert
 

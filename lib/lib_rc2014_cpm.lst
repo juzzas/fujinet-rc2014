@@ -1,6 +1,7 @@
 src/hal/cpm/hal.asm
 src/hal/cpm/hal_console.asm
-src/fujinet.c
+src/asm_fujinet.asm
+src/fujinet.asm
 src/fujinet_device.c
 src/fujinet_modem.c
 src/fujinet_network.c

@@ -14,7 +14,7 @@ struct fujinet_dcb {
     uint16_t buffer_bytes; // data length in bytes
     uint8_t *response;
     uint16_t response_bytes; // data length in bytes
-    uint8_t timeout;   // seconds
+    uint16_t timeout;   // 10ths of seconds
 };
 
 #define FUJINET_TIMEOUT 15
