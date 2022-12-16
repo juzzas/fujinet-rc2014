@@ -37,7 +37,9 @@ FUJINET_RC do_wifi_status(void)
           cprintf("Connected to network, and active\n");
           rc = fujinet_get_adapter_config(&adapter);
           if (rc == FUJINET_RC_OK) {
-              cprintf("ssid: %s\n", adapter.ssid);
+              cputs("ssid: ");
+              cputs(adapter.ssid);
+              cputs("\n");
               cprintf("ip: %d.%d.%d.%d\n", adapter.localIP[0], adapter.localIP[1], adapter.localIP[2], adapter.localIP[3]);
               cprintf("netmask: %d.%d.%d.%d\n", adapter.netmask[0], adapter.netmask[1], adapter.netmask[2], adapter.netmask[3]);
               cprintf("gateway: %d.%d.%d.%d\n", adapter.gateway[0], adapter.gateway[1], adapter.gateway[2], adapter.gateway[3]);
