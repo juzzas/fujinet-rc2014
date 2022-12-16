@@ -50,7 +50,7 @@ uint8_t fujinet_checksum(uint8_t *buf, uint16_t len);
  *
  * @param dcb pointer to the device control block
  */
-FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb);
+FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) __z88dk_fastcall;
 
 
 #endif /* FUJINET_H */

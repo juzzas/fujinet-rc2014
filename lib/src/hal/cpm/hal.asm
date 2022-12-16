@@ -24,7 +24,8 @@ PUBLIC fujinet_hal_rx_avail
 PUBLIC fujinet_hal_rx_avail_timeout
 PUBLIC fujinet_hal_assert_cmd
 
-EXTERN msleep
+;EXTERN msleep
+EXTERN asm_z80_delay_ms
 
 ;;Initialised the FujiNet hardware
 ;void fujinet_hal_init(void);
@@ -96,7 +97,12 @@ fujinet_hal_rx_avail_timeout:
     ret z ; (A = 0, here)
 
     ld hl, 100
-    call msleep
+    push bc
+    push de
+    ;call msleep
+    call asm_z80_delay_ms
+    pop de
+    pop bc
     dec de
     jr fujinet_hal_rx_avail_timeout
 

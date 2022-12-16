@@ -6,7 +6,7 @@
 #include "fujinet.h"
 #include "fujinet_device.h"
 
-struct fujinet_dcb dcb = {};
+struct fujinet_dcb dcb;
 
 FUJINET_RC fujinet_device_reset(void)
 {

@@ -2,12 +2,15 @@
  * FujiNet Stream tool
  */
 
-#include <conio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
 #include "fujinet.h"
 #include "fujinet_device.h"
+#include "fujinet_modem.h"
+#include "fujinet_printer.h"
 
 NetConfig nc;
 AdapterConfig adapter;
@@ -66,20 +69,14 @@ uint8_t get_device_id(char* devicespec)
 }
 
 
-bool validate_devicespec(char* devicespec)
-{
-    bool ret = false;
-}
-
-
 int main(int argc, char **argv)
 {
-    cprintf("FujiNet module - Set stream\n");
+    printf("FujiNet module - Set stream\n");
 
     fujinet_init();
 
     if (argc == 1) {
-        cprintf("Usage: fnstream <DEVICE SPEC>\n");
+        printf("Usage: fnstream <DEVICE SPEC>\n");
         exit(1);
     }
 
@@ -89,7 +86,7 @@ int main(int argc, char **argv)
     char device = argv[1][0];
     uint8_t unit = get_unit(argv[1]);
 
-    cprintf("OPEN DEVICE FOR STREAM: %c%c:\n", device, unit);
+    printf("OPEN DEVICE FOR STREAM: %c%c:\n", device, unit);
 
     switch (device) {
     case 'P':
@@ -106,15 +103,15 @@ int main(int argc, char **argv)
 
     switch (rc) {
         case FUJINET_RC_OK:
-            cprintf("done\n");
+            printf("done\n");
             break;
 
         case FUJINET_RC_TIMEOUT:
-            cprintf("Timed out!\n");
+            printf("Timed out!\n");
             break;
 
         case FUJINET_RC_INVALID:
-            cprintf("Invalid parameter!\n");
+            printf("Invalid parameter!\n");
             break;
 
         default:

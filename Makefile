@@ -1,4 +1,5 @@
-TARGET=+cpm
+#TARGET=+cpm
+TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
 #SUB_TARGET=-Ilib/include @lib/lib_rc2014_cpm.lst
 SUB_TARGET=-Ilib/include
 LIB_FUJINET=@lib/lib_rc2014_cpm.lst
