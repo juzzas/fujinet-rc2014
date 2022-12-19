@@ -1,1 +1,2 @@
-main.asm
+main.c
+loader.asm

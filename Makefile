@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 #TARGET=+cpm
 #TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
 TARGET=+cpm -clib=sdcc_iy --max-allocs-per-node200000
+=======
+TARGET=+cpm -clib=sdcc_iy
+#TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
+>>>>>>> add loader
 #SUB_TARGET=-Ilib/include @lib/lib_rc2014_cpm.lst
 SUB_TARGET=-Ilib/include
 LIB_FUJINET=@lib/lib_rc2014_cpm.lst
@@ -16,7 +21,7 @@ LIB_FUJINET=@lib/lib_rc2014_cpm.lst
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 
 
-.PHONY: all clean lib fnreset fnwifi jsontest fnpip
+.PHONY: all clean lib fnreset fnwifi jsontest fnpip fnrsx
 
 all: fninit fnreset
 
@@ -44,7 +49,11 @@ fnstream:
 fndisk:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fndisk/fndisk.lst ${LIB_FUJINET} -o fndisk.com -create-app
 
+fnrsx:
+	z88dk-z80asm -v -b -reloc-info -l -s -m -g -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.bin -create-app
+
 
 clean:
-	rm -f *.dsk *.map *.bin *.ihx *.com *.COM
+	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def
 	find . -name "*.lis" -exec rm {} \;
