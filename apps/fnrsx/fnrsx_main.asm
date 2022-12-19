@@ -1,4 +1,4 @@
-; compile with  z88dk-z80asm -v -b -reloc-info -l -s -m -g -omain.bin main.asm
+; compile with  z88dk-z80asm -v -b -reloc-info -l -s -m -g -omain.bin fnrsx_main.asm
 
 jumptable:
     jp REL_init
