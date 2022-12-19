@@ -51,7 +51,7 @@ fndisk:
 
 fnrsx:
 	z88dk-z80asm -v -b -reloc-info -l -s -m -g -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.bin -create-app
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.com -create-app
 
 
 clean:

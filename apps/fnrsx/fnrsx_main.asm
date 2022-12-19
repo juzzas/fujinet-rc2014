@@ -1,17 +1,23 @@
 ; compile with  z88dk-z80asm -v -b -reloc-info -l -s -m -g -omain.bin fnrsx_main.asm
 
-jumptable:
-    jp REL_init
-    jp REL_test
+EXTERN bdos_handler
+EXTERN old_bdos
+
+driver_bdos:
+    jp bdos_handler
+    jp driver_init
 
 
-REL_init:
-    ld hl, 0x1234
-    ret
+driver_init:
+    ;; install our bdos, thereby reducing tpa.
+    ld hl, 0x0005
+    ld de, old_bdos
+    ld bc, 3
+    ldir
 
-REL_test:
-    call REL_subroutine
-    ret
+    ;; install our bdos
+    ld a, 0xc3
+    ld hl, driver_bdos
+    ld (0x0005), a
+    ld (0x0006), hl
 
-REL_subroutine:
-    ret
