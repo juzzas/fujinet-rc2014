@@ -3,9 +3,11 @@
 EXTERN bdos_handler
 EXTERN old_bdos
 
-driver_bdos:
-    jp bdos_handler
+EXTERN fujinet_init
+
+jump_table:
     jp driver_init
+    jp bdos_handler
 
 
 driver_init:
@@ -17,7 +19,11 @@ driver_init:
 
     ;; install our bdos
     ld a, 0xc3
-    ld hl, driver_bdos
+    ld hl, jump_table + 3
     ld (0x0005), a
     ld (0x0006), hl
+
+    CALL fujinet_init
+
+    ret
 

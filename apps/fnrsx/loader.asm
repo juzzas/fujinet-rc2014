@@ -3,6 +3,7 @@ PUBLIC _driver_code           ; extern uint8_t* driver_code
 PUBLIC _driver_code_size      ; extern uint16_t driver_code_size
 PUBLIC _reloc_info            ; extern uint16_t* reloc_info
 PUBLIC _reloc_info_size      ; extern uint16_t reloc_info_size
+PUBLIC _driver_code_init
 
 SECTION rodata_user
 
@@ -17,6 +18,10 @@ _reloc_info:
 
 _reloc_info_size:
     DEFW ((end_reloc_info - start_reloc_info) / 2)
+
+_driver_code_init:
+    jp (hl)
+    ret
 
 
 
