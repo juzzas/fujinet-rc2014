@@ -57,3 +57,4 @@ fnrsx:
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def
 	find . -name "*.lis" -exec rm {} \;
+	find . -name "*.sym" -exec rm {} \;
