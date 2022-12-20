@@ -19,7 +19,7 @@ LIB_FUJINET=@lib/lib_rc2014_cpm.lst
 # -subtype=allram    (default) Loads the program to A+B+C+D, screen paged on demand into C+D
 # -subtype=highram   Loads the program to C+D, screen into A+B
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
-
+CPU_CLOCK=7372800
 
 .PHONY: all clean lib fnreset fnwifi jsontest fnpip fnrsx
 
@@ -50,7 +50,7 @@ fndisk:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fndisk/fndisk.lst ${LIB_FUJINET} -o fndisk.com -create-app
 
 fnrsx:
-	z88dk-z80asm -v -b -reloc-info -l -s -m -g -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst
+	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.com -create-app
 
 

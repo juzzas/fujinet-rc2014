@@ -1,2 +1,6 @@
 fnrsx_main.asm
 fnrsx_bdos.asm
+../../lib/src/asm_fujinet.asm
+apps/fnrsx/lowlevel/hal_rev0.asm
+asm_z80_delay_ms.asm
+asm_z80_delay_tstate.asm
