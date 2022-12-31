@@ -11,6 +11,9 @@
 #define MODE_READ 1
 #define MODE_WRITE 2
 
+#define FUJINET_MAX_HOST_SLOTS    8
+#define FUJINET_MAX_DEVICE_SLOTS  8
+
 typedef unsigned short DirectoryPosition;
 
 
@@ -48,7 +51,9 @@ typedef struct
   char fn_version[15];
 } AdapterConfig;
 
-typedef unsigned char HostSlot[32];
+typedef struct {
+  unsigned char hostname[32];
+} HostSlot;
 
 typedef struct {
   unsigned char hostSlot;

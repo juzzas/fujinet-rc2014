@@ -5,6 +5,21 @@
 #ifndef FUJINET_DEVICE_H
 #define FUJINET_DEVICE_H
 
+#define RC2014_DEVICEID_DISK 0x31
+#define RC2014_DEVICEID_DISK_LAST 0x3F
+
+#define RC2014_DEVICEID_PRINTER 0x41
+#define RC2014_DEVICEID_PRINTER_LAST 0x44
+
+
+#define RC2014_DEVICEID_FUJINET 0x70
+#define RC2014_DEVICEID_FN_NETWORK 0x71
+#define RC2014_DEVICEID_FN_NETWORK_LAST 0x78
+
+#define RC2014_DEVICEID_MODEM 0x50
+
+#define RC2014_DEVICEID_CPM 0x5A
+
 /**
  * Reset the FujiNet device
  *
@@ -112,9 +127,9 @@ FUJINET_RC fujinet_open_directory(unsigned char hs, char *p, char *f);
 /**
  * Read directory entry at current index
  *
- * @param dirent [OUT]
- * @param l [IN]
- * @param a [IN]
+ * @param dirent [OUT] buffer to put directory entry
+ * @param l [IN] length of directory entry to read
+ * @param a [IN] attributes (0x80 = extended info)
  * @return FUJINET_RC_OK on success, else error
  */
 FUJINET_RC fujinet_read_directory(char *dirent, unsigned char l, unsigned char a);
@@ -133,5 +148,26 @@ FUJINET_RC fujinet_close_directory(void);
  * @return FUJINET_RC_OK on success, else error
  */
 FUJINET_RC fujinet_set_directory_position(DirectoryPosition pos);
+
+FUJINET_RC fujinet_set_device_filename(unsigned char ds, char* e);
+
+FUJINET_RC fujinet_get_device_filename(unsigned char ds, char* response);
+
+FUJINET_RC fujinet_create_new(uint8_t selected_host_slot,
+                              uint8_t selected_device_slot,
+                              unsigned long selected_size,
+                              char *path);
+
+FUJINET_RC fujinet_mount_disk_image(uint8_t ds, uint8_t mode);
+
+FUJINET_RC fujinet_set_boot_config(uint8_t toggle);
+
+FUJINET_RC fujinet_umount_disk_image(uint8_t ds);
+
+FUJINET_RC fujinet_get_device_enabled_status(uint8_t d, uint8_t* response);
+
+FUJINET_RC fujinet_enable_device(uint8_t d);
+
+FUJINET_RC fujinet_disable_device(uint8_t d);
 
 #endif /* FUJINET_DEVICE_H */

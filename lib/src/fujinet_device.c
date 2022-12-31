@@ -77,6 +77,7 @@ FUJINET_RC fujinet_get_scan_result(uint8_t n, SSIDInfo *info)
 FUJINET_RC fujinet_get_adapter_config(AdapterConfig *ac)
 {
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
     dcb.device = 0x70;
     dcb.command = 0xE8; // Get adaptor config
     dcb.timeout = FUJINET_TIMEOUT;
@@ -183,7 +184,7 @@ FUJINET_RC fujinet_open_directory(unsigned char hs, char *p, char *f)
     }
 
     dcb.device = 0x70;
-    dcb.command = 0xF1;
+    dcb.command = 0xF7;
     dcb.buffer = (uint8_t *)c;
     dcb.buffer_bytes = 256;
     dcb.timeout = 15;
@@ -202,7 +203,7 @@ FUJINET_RC fujinet_read_directory(char *dirent, unsigned char l, unsigned char a
     dcb.aux1 = l;
     dcb.aux2 = a;
     dcb.response = (uint8_t *)dirent;
-    dcb.response_bytes = 256;
+    dcb.response_bytes = l;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -227,6 +228,129 @@ FUJINET_RC fujinet_set_directory_position(DirectoryPosition pos)
     dcb.timeout = 15;
     dcb.aux1 = pos & 0xff;
     dcb.aux2 = (pos >> 8) & 0xff;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_set_device_filename(uint8_t ds, char* e)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xE4;
+    dcb.timeout = 15;
+    dcb.buffer = (uint8_t *)e;
+    dcb.buffer_bytes = 256;
+    dcb.aux1 = ds;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+
+FUJINET_RC fujinet_get_device_filename(uint8_t ds, char* buffer)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xDA;
+    dcb.timeout = 15;
+    dcb.response = (uint8_t*)buffer;
+    dcb.response_bytes = 256;
+    dcb.aux1 = ds;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_create_new(uint8_t selected_host_slot,
+                              uint8_t selected_device_slot,
+                              unsigned long selected_size,
+                              char *path)
+{
+    char nd[263]={0xE7,0x00,0x00,0x00,0x00,0x00,0x00};
+    char *c = &nd[3];
+    unsigned long *l = (unsigned long *)c;
+
+    nd[1]=selected_host_slot;
+    nd[2]=selected_device_slot;
+    *l=selected_size;
+    strcpy(&nd[7],path);
+
+    //  eos_write_character_device(FUJI_DEV,&nd,sizeof(nd));
+    return FUJINET_RC_NOT_IMPLEMENTED;
+}
+
+
+FUJINET_RC fujinet_mount_disk_image(uint8_t ds, uint8_t mode)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xF8;
+    dcb.timeout = 15;
+    dcb.aux1 = ds;
+    dcb.aux2 = mode;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_set_boot_config(uint8_t toggle)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xD9;
+    dcb.timeout = 15;
+    dcb.aux1 = toggle;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_umount_disk_image(uint8_t ds)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xE9;
+    dcb.timeout = 15;
+    dcb.aux1 = ds;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_get_device_enabled_status(uint8_t d, uint8_t* response)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xD1;
+    dcb.timeout = 15;
+    dcb.aux1 = d;
+    dcb.response = (uint8_t *)response;
+    dcb.response_bytes = 1;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_enable_device(uint8_t d)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xD5;
+    dcb.timeout = 15;
+    dcb.aux1 = d;
+
+    return fujinet_dcb_exec(&dcb);
+}
+
+FUJINET_RC fujinet_disable_device(uint8_t d)
+{
+    memset(&dcb, 0, sizeof(struct fujinet_dcb));
+
+    dcb.device = 0x70;
+    dcb.command = 0xD4;
+    dcb.timeout = 15;
+    dcb.aux1 = d;
 
     return fujinet_dcb_exec(&dcb);
 }

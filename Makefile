@@ -38,6 +38,9 @@ fnpip:
 fnstream:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnstream/fnstream.lst ${LIB_FUJINET} -o fnstream.com -create-app
 
+fndisk:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fndisk/fndisk.lst ${LIB_FUJINET} -o fndisk.com -create-app
+
 
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM
