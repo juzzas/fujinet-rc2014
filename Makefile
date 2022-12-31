@@ -1,5 +1,6 @@
 #TARGET=+cpm
-TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
+#TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
+TARGET=+cpm -clib=sdcc_iy --max-allocs-per-node200000
 #SUB_TARGET=-Ilib/include @lib/lib_rc2014_cpm.lst
 SUB_TARGET=-Ilib/include
 LIB_FUJINET=@lib/lib_rc2014_cpm.lst
@@ -15,7 +16,7 @@ LIB_FUJINET=@lib/lib_rc2014_cpm.lst
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 
 
-.PHONY: all clean lib fnreset fnwifi jsontest wget
+.PHONY: all clean lib fnreset fnwifi jsontest fnpip
 
 all: fnreset fnwifi fnstream
 
@@ -31,8 +32,8 @@ fnwifi:
 jsontest:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/jsontest/jsontest.lst ${LIB_FUJINET} -o jsontest.com -create-app
 
-wget:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/wget/wget.lst ${LIB_FUJINET} -o wget.com -create-app
+fnpip:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnpip/fnpip.lst ${LIB_FUJINET} -o fnpip.com -create-app
 
 fnstream:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnstream/fnstream.lst ${LIB_FUJINET} -o fnstream.com -create-app

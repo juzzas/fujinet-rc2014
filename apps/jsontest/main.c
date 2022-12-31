@@ -19,8 +19,8 @@
 #include "fujinet_network.h"
 
 // #define ABORT_ON_ERROR
-const char *url = "N:HTTPS://oldbytes.space/api/v1/timelines/public?limit=1";
-//const char *url = "N:HTTP://api.open-notify.org/iss-now.json";
+//const char *url = "N:HTTPS://oldbytes.space/api/v1/timelines/public?limit=1";
+const char *url = "N:HTTP://api.open-notify.org/iss-now.json";
 
 /*
 [
@@ -118,14 +118,16 @@ void success_or_fail(FUJINET_RC err) {
   }
 }
 
+#if 0
 #define NUM_ELEMENTS 3
 const char * elements[NUM_ELEMENTS] = {
   "/0/account/display_name",
   "/0/created_at",
   "/0/content",
 };
+#endif
 
-#if 0
+#if 1
 #define NUM_ELEMENTS 3
 const char * elements[NUM_ELEMENTS] = {
     "/iss_position/latitude",
