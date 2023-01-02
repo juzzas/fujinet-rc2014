@@ -70,4 +70,30 @@ typedef struct
   char filename[256];
 } NewDisk;
 
+typedef struct {
+    unsigned char modified_year;
+    unsigned char modified_month;
+    unsigned char modified_day;
+    unsigned char modified_hour;
+    unsigned char modified_minute;
+    unsigned char modified_second;
+
+    // 32bit value for file size
+    unsigned char file_size_0; //_lsb;
+    unsigned char file_size_1;
+    unsigned char file_size_2;
+    unsigned char file_size_3; //_msb;
+
+    // DIR_ENTRY_FF flags
+    unsigned char file_flags;
+
+    // DIR_ENTRY_FT type
+    unsigned char file_type;
+} DirEntryAttributes;
+
+#define DIR_ENTRY_FF_DIR    0x01
+#define DIR_ENTRY_FF_TRUNC  0x02
+
+#define DIR_ENTRY_FT_UNKNOWN  0x00
+
 #endif /* FUJI_TYPEDEFS_H */
