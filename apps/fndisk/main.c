@@ -9,6 +9,7 @@
 #include "fujinet_device.h"
 
 #include "disk_list.h"
+#include "disk_set.h"
 #include "disk_status.h"
 
 HostSlot hosts[FUJINET_MAX_HOST_SLOTS];
@@ -24,13 +25,24 @@ int main(int argc, char **argv)
     FUJINET_RC rc = FUJINET_RC_INVALID;
 
     if (argc > 1) {
-        if (strcmp(argv[1], "LS") == 0) {
+        if (strcmp(argv[1], "LIST") == 0) {
             if (argc > 2) {
                 rc = do_disk_list(argv[2], "/", "*.*");
             } if (argc > 3) {
                 rc = do_disk_list(argv[2], argv[3], "*.*");
             } if (argc > 4) {
                 rc = do_disk_list(argv[2], argv[3], argv[4]);
+            } else {
+                rc = FUJINET_RC_INVALID;
+            }
+        }
+        else if (strcmp(argv[1], "SET") == 0) {
+            if (argc > 2) {
+                rc = do_disk_set(argv[2], "");
+            } if (argc > 3) {
+                rc = do_disk_set(argv[2], argv[3]);
+            } else {
+                rc = FUJINET_RC_INVALID;
             }
         }
     } else {

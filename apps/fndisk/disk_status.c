@@ -35,10 +35,17 @@ FUJINET_RC do_disk_status(void) {
         for (i = 0; i < FUJINET_MAX_DEVICE_SLOTS; i++) {
             ds = get_device_at(i);
             if (ds) {
-                printf("%d> host:%d mode:%x: %s\n", i,
-                       ds->hostSlot,
-                       ds->mode,
-                       ds->file);
+                if (ds->file[0] != 0) {
+                    printf("%d> host:%d mode:%x: %s\n",
+                           i,
+                           ds->hostSlot,
+                           ds->mode,
+                           ds->file);
+                }
+                else
+                {
+                    printf("%d> Empty\n");
+                }
             }
         }
     }

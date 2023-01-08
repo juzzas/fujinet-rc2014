@@ -27,3 +27,9 @@ DeviceSlot* get_device_at(int i) {
 void set_device_at(int i, DeviceSlot* device) {
 
 }
+
+FUJINET_RC set_device_filename_at(int i, char* filename) {
+    FUJINET_RC rc = fujinet_set_device_filename((unsigned char)i, filename);
+    if (rc == FUJINET_RC_OK)
+        rc = fetch_devices();
+}
