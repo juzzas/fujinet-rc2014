@@ -170,4 +170,6 @@ FUJINET_RC fujinet_enable_device(uint8_t d);
 
 FUJINET_RC fujinet_disable_device(uint8_t d);
 
+FUJINET_RC fujinet_mount_all(void);
+
 #endif /* FUJINET_DEVICE_H */

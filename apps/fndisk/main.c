@@ -9,6 +9,7 @@
 #include "fujinet_device.h"
 
 #include "disk_list.h"
+#include "disk_mount.h"
 #include "disk_set.h"
 #include "disk_status.h"
 
@@ -26,21 +27,30 @@ int main(int argc, char **argv)
 
     if (argc > 1) {
         if (strcmp(argv[1], "LIST") == 0) {
-            if (argc > 2) {
-                rc = do_disk_list(argv[2], "/", "*.*");
+            if (argc > 4) {
+                rc = do_disk_list(argv[2], argv[3], argv[4]);
             } if (argc > 3) {
                 rc = do_disk_list(argv[2], argv[3], "*.*");
-            } if (argc > 4) {
-                rc = do_disk_list(argv[2], argv[3], argv[4]);
+            } if (argc > 2) {
+                rc = do_disk_list(argv[2], "/", "*.*");
             } else {
                 rc = FUJINET_RC_INVALID;
             }
-        }
-        else if (strcmp(argv[1], "SET") == 0) {
-            if (argc > 2) {
-                rc = do_disk_set(argv[2], "");
-            } if (argc > 3) {
+        } else if (strcmp(argv[1], "SET") == 0) {
+            if (argc > 3) {
                 rc = do_disk_set(argv[2], argv[3]);
+            } if (argc > 2) {
+                rc = do_disk_set(argv[2], "");
+            } else {
+                rc = FUJINET_RC_INVALID;
+            }
+        } else if (strcmp(argv[1], "MOUNTALL") == 0) {
+            rc = do_disk_mount_all();
+        } else if (strcmp(argv[1], "MOUNT") == 0) {
+            if (argc > 4) {
+                rc = do_disk_mount(argv[2], argv[3], argv[4]);
+            } else if (argc > 3) {
+                rc = do_disk_mount(argv[2], argv[3], "DEFAULT");
             } else {
                 rc = FUJINET_RC_INVALID;
             }

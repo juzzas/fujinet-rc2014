@@ -20,7 +20,7 @@ FUJINET_RC do_disk_status(void) {
     rc = fetch_hosts();
     if (rc == FUJINET_RC_OK) {
         printf("Hosts:\n");
-        for (i = 0; i < FUJINET_MAX_HOST_SLOTS; i++) {
+        for (i = 1; i <= FUJINET_MAX_HOST_SLOTS; i++) {
             hs = get_host_at(i);
             if (hs)
                 printf("%d> %s\n", i, hs->hostname);
@@ -32,7 +32,7 @@ FUJINET_RC do_disk_status(void) {
     rc = fetch_devices();
     if (rc == FUJINET_RC_OK) {
         printf("Devices:\n");
-        for (i = 0; i < FUJINET_MAX_DEVICE_SLOTS; i++) {
+        for (i = 1; i <= FUJINET_MAX_DEVICE_SLOTS; i++) {
             ds = get_device_at(i);
             if (ds) {
                 if (ds->file[0] != 0) {

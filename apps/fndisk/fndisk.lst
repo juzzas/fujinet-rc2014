@@ -2,5 +2,6 @@ main.c
 disk_status.c
 disk_list.c
 disk_set.c
+disk_mount.c
 devices.c
 hosts.c
