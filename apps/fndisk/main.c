@@ -8,6 +8,7 @@
 #include "fujinet.h"
 #include "fujinet_device.h"
 
+#include "disk_dump.h"
 #include "disk_list.h"
 #include "disk_mount.h"
 #include "disk_set.h"
@@ -51,6 +52,14 @@ int main(int argc, char **argv)
                 rc = do_disk_mount(argv[2], argv[3], argv[4]);
             } else if (argc > 3) {
                 rc = do_disk_mount(argv[2], argv[3], "DEFAULT");
+            } else {
+                rc = FUJINET_RC_INVALID;
+            }
+        } else if (strcmp(argv[1], "DUMP") == 0) {
+            if (argc > 3) {
+                rc = do_disk_dump(argv[2], argv[3]);
+            } else if (argc > 2) {
+                rc = do_disk_dump(argv[2], 0);
             } else {
                 rc = FUJINET_RC_INVALID;
             }

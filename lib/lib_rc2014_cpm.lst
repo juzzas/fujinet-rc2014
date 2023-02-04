@@ -3,6 +3,7 @@ src/hal/cpm/hal_console.asm
 src/asm_fujinet.asm
 src/fujinet.asm
 src/fujinet_device.c
+src/fujinet_disk.c
 src/fujinet_modem.c
 src/fujinet_network.c
 src/fujinet_printer.c

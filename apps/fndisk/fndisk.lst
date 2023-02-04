@@ -1,7 +1,8 @@
 main.c
-disk_status.c
+disk_dump.c
 disk_list.c
-disk_set.c
 disk_mount.c
+disk_set.c
+disk_status.c
 devices.c
 hosts.c

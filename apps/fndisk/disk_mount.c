@@ -49,7 +49,7 @@ FUJINET_RC do_disk_mount(char* cpm_drive, char* drive_device, char* mount_mode) 
 
 FUJINET_RC do_disk_mount_all(void) {
     FUJINET_RC rc;
-    printf("MOUNT ALL");
+    printf("MOUNT ALL\n");
     rc = fujinet_mount_all();
     return rc;
 }
