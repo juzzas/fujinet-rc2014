@@ -41,7 +41,7 @@ FUJINET_RC fujinet_get_ssid(NetConfig *nc)
     dcb.command = 0xFE;
     dcb.response = (uint8_t *)nc;
     dcb.response_bytes = sizeof(NetConfig);
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -95,7 +95,7 @@ FUJINET_RC fujinet_set_ssid(NetConfig *nc)
     dcb.command = 0xFB;
     dcb.buffer = (uint8_t *)nc;
     dcb.buffer_bytes = sizeof(NetConfig);
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -108,7 +108,7 @@ FUJINET_RC fujinet_get_device_slots(DeviceSlot *d)
     dcb.command = 0xF2;
     dcb.response = (uint8_t *)d;
     dcb.response_bytes = sizeof(DeviceSlot) * 8;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -121,7 +121,7 @@ FUJINET_RC fujinet_get_host_slots(HostSlot *h)
     dcb.command = 0xF4;
     dcb.response = (uint8_t *)h;
     dcb.response_bytes = sizeof(HostSlot) * 8;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -134,7 +134,7 @@ FUJINET_RC fujinet_put_host_slots(HostSlot *h)
     dcb.command = 0xF3;
     dcb.buffer = (uint8_t *)h;
     dcb.buffer_bytes = sizeof(HostSlot) * 8;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -147,7 +147,7 @@ FUJINET_RC fujinet_put_device_slots(DeviceSlot *d)
     dcb.command = 0xF1;
     dcb.buffer = (uint8_t *)d;
     dcb.buffer_bytes = sizeof(DeviceSlot) * 8;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -158,7 +158,7 @@ FUJINET_RC fujinet_mount_host_slot(unsigned char hs)
 
     dcb.device = 0x70;
     dcb.command = 0xF9;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
     dcb.aux1 = hs;
 
     return fujinet_dcb_exec(&dcb);
@@ -187,7 +187,7 @@ FUJINET_RC fujinet_open_directory(unsigned char hs, char *p, char *f)
     dcb.command = 0xF7;
     dcb.buffer = (uint8_t *)open_dir_buffer;
     dcb.buffer_bytes = 256;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
     dcb.aux1 = hs;
 
     return fujinet_dcb_exec(&dcb);
@@ -199,7 +199,7 @@ FUJINET_RC fujinet_read_directory(char *dirent, unsigned char l, unsigned char a
 
     dcb.device = 0x70;
     dcb.command = 0xF6;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
     dcb.aux1 = l;
     dcb.aux2 = a;
     dcb.response = (uint8_t *)dirent;
@@ -214,7 +214,7 @@ FUJINET_RC fujinet_close_directory(void)
 
     dcb.device = 0x70;
     dcb.command = 0xF5;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }
@@ -225,7 +225,7 @@ FUJINET_RC fujinet_set_directory_position(DirectoryPosition pos)
 
     dcb.device = 0x70;
     dcb.command = 0xE4;
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
     dcb.aux1 = pos & 0xff;
     dcb.aux2 = (pos >> 8) & 0xff;
 

@@ -18,7 +18,7 @@ FUJINET_RC fujinet_printer_stream(uint8_t printer_unit)
 
     dcb.device = 0x40 + printer_unit;
     dcb.command = 'X';
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }

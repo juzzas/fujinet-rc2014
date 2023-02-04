@@ -18,7 +18,7 @@ FUJINET_RC fujinet_modem_stream(uint8_t modem_unit)
 
     dcb.device = 0x50 + modem_unit;
     dcb.command = 'X';
-    dcb.timeout = 15;
+    dcb.timeout = FUJINET_TIMEOUT;
 
     return fujinet_dcb_exec(&dcb);
 }

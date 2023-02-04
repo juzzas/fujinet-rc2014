@@ -38,7 +38,7 @@ int in_fujinet(void)
 
     if (status.extended_error != 1) {
         printf("extended error: %d\n", status.extended_error);
-        return -status.extended_error;
+        return status.extended_error;
     }
 
     memset(buffer, 0, 256);
@@ -56,8 +56,18 @@ int in_fujinet(void)
                 //printf("\rread %u bytes", src_size);
                 return 0;
             }
+            else
+            {
+                printf("read error: %d", rc);
+            }
         }
     }
+
+    printf("last status: 0x%02x 0x%02x 0x%02x 0x%02x\n",
+             status.bytes_waiting_low,
+             status.bytes_waiting_high,
+             status.protocol_status,
+             status.extended_error);
 
     return -1;
 }
@@ -122,12 +132,18 @@ int main(int argc, char **argv)
 
             while(!done) {
                 switch (src_type) {
-                    case DEVICE_FN:
-                        if (in_fujinet() != 0) {
-                            printf("read %u bytes", src_size);
+                    case DEVICE_FN: {
+                        int rc = in_fujinet();
+                        if (rc != 0) {
+                            if (rc != NETWORK_ERROR_END_OF_FILE) {
+                                printf("Network error: %d", rc);
+                            }
+
+                            printf("read %u bytes\n", src_size);
                             done = true;
                         }
                         break;
+                    }
                     default:
                         break;
                 }

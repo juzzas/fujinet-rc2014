@@ -24,6 +24,10 @@ int main(void) {
         printf("Timed out!\n");
         break;
 
+    case FUJINET_RC_NO_ACK:
+        printf("No Acknowledge!\n");
+        break;
+
     default:
         printf("Unexpected error (%d)\n", rc);
     }

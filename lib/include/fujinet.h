@@ -14,10 +14,10 @@ struct fujinet_dcb {
     uint16_t buffer_bytes; // data length in bytes
     uint8_t *response;
     uint16_t response_bytes; // data length in bytes
-    uint16_t timeout;   // 10ths of seconds
+    uint16_t timeout;   // milliseconds
 };
 
-#define FUJINET_TIMEOUT 15
+#define FUJINET_TIMEOUT 15000
 
 typedef enum {
     FUJINET_RC_OK,

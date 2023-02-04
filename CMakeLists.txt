@@ -8,7 +8,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/lib/include)
 add_library(fujinet STATIC
         lib/src/hal/cpm/hal.asm
         lib/src/hal/cpm/hal_console.asm
-        lib/src/asm_fujinet.asm
+        lib/src/asm_fujinet_serial-rev0.asm
         lib/src/fujinet.asm
         lib/src/fujinet_device.c
         lib/src/fujinet_modem.c

@@ -18,7 +18,10 @@ LIB_FUJINET=@lib/lib_rc2014_cpm.lst
 
 .PHONY: all clean lib fnreset fnwifi jsontest fnpip
 
-all: fnreset fnwifi fnstream
+all: fninit fnreset
+
+fninit:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fninit/fninit.lst ${LIB_FUJINET} -o fninit.com -create-app
 
 fnreset:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst ${LIB_FUJINET} -o fnreset.com -create-app

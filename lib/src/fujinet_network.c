@@ -6,7 +6,7 @@
 
 #include "fujinet_network.h"
 
-#define TIMEOUT 0x1f /* approx 30 seconds */
+#define TIMEOUT 30000 /* approx 30 seconds */
 
 extern struct fujinet_dcb dcb;
 
