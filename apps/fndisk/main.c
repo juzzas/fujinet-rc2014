@@ -30,9 +30,9 @@ int main(int argc, char **argv)
         if (strcmp(argv[1], "LIST") == 0) {
             if (argc > 4) {
                 rc = do_disk_list(argv[2], argv[3], argv[4]);
-            } if (argc > 3) {
+            } else if (argc > 3) {
                 rc = do_disk_list(argv[2], argv[3], "*.*");
-            } if (argc > 2) {
+            } else if (argc > 2) {
                 rc = do_disk_list(argv[2], "/", "*.*");
             } else {
                 rc = FUJINET_RC_INVALID;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[1], "SET") == 0) {
             if (argc > 3) {
                 rc = do_disk_set(argv[2], argv[3]);
-            } if (argc > 2) {
+            } else if (argc > 2) {
                 rc = do_disk_set(argv[2], "");
             } else {
                 rc = FUJINET_RC_INVALID;
