@@ -1,0 +1,2 @@
+src/driver/cpm_spi-rev0/driver.asm
+src/driver/cpm_spi-rev0/asm_fujinet.asm

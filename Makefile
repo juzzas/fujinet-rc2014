@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-#TARGET=+cpm
-#TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
 TARGET=+cpm -clib=sdcc_iy --max-allocs-per-node200000
-=======
-TARGET=+cpm -clib=sdcc_iy
-#TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
->>>>>>> add loader
-#SUB_TARGET=-Ilib/include @lib/lib_rc2014_cpm.lst
+
 SUB_TARGET=-Ilib/include
-LIB_FUJINET=@lib/lib_rc2014_cpm.lst
+LIB_FUJINET=@lib/driver_rc2014_spi.lst @lib/lib_rc2014_cpm.lst
+
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
 #TARGET=+rc2014 -subtype=sio @hal/hal_rc2014_sio.lst
