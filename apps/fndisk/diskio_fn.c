@@ -1,8 +1,9 @@
 /*------------------------------------------------------------------------/
-/  Foolproof HBIOS control module
+/  Foolproof FujiNet control module
 /-------------------------------------------------------------------------/
 /
 /  Copyright (C) 2019, feilipu, all right reserved.
+/  Copyright (C) 2023, @jskists, all right reserved.
 /
 / * This software is a free software and there is NO WARRANTY.
 / * No restriction on use. You can use, modify and redistribute it for
@@ -18,6 +19,7 @@
 
 #include "fujinet.h"
 #include "fujinet_device.h"
+#include "fujinet_disk.h"
 
 /*--------------------------------------------------------------------------
 
@@ -93,7 +95,7 @@ DRESULT disk_read (
 ) __smallc
 #endif
 {
-    FUJINET rc = FUJINET_RC_OK;
+    FUJINET_RC rc = FUJINET_RC_OK;
 
     if (count == 0 ) return RES_PARERR;             /* sector count can't be zero */
 
@@ -125,7 +127,7 @@ DRESULT disk_write (
 ) __smallc
 #endif
 {
-    FUJINET rc = FUJINET_RC_OK;
+    FUJINET_RC rc = FUJINET_RC_OK;
 
     if (count == 0 ) return RES_PARERR;             /* sector count can't be zero */
 
