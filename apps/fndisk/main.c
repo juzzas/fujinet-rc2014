@@ -13,6 +13,7 @@
 #include "disk_mount.h"
 #include "disk_set.h"
 #include "disk_status.h"
+#include "fat_dir.h"
 
 HostSlot hosts[FUJINET_MAX_HOST_SLOTS];
 DeviceSlot devices[FUJINET_MAX_DEVICE_SLOTS];
@@ -63,6 +64,8 @@ int main(int argc, char **argv)
             } else {
                 rc = FUJINET_RC_INVALID;
             }
+        } else if (strcmp(argv[1], "FATDIR") == 0) {
+            rc = do_fat_dir();
         }
     } else {
         rc = do_disk_status();

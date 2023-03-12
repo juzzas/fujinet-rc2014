@@ -6,3 +6,5 @@ disk_set.c
 disk_status.c
 devices.c
 hosts.c
+fat_dir.c
+diskio_fn.c
