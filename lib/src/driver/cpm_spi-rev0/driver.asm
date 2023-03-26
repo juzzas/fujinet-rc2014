@@ -10,6 +10,7 @@ DEFC PIO_CTRL_A = 0x6a
 DEFC PIO_CTRL_B = 0x6b
 
 DEFC MASK_CMD_RDY = 0b10000000
+DEFC MASK_PROCEED = 0b01000000
 DEFC MASK_MOSI = 0b00000010
 DEFC MASK_MISO = 0b00000001
 
@@ -29,6 +30,7 @@ PUBLIC fujinet_hal_assert_spi_cs
 PUBLIC fujinet_hal_deassert_spi_cs
 PUBLIC fujinet_hal_wait_cmd_ready
 PUBLIC fujinet_hal_wait_cmd_ready_timeout
+PUBLIC fujinet_poll_proceed
 
 ;EXTERN msleep
 EXTERN asm_z80_delay_ms
@@ -82,7 +84,7 @@ tx_low:
     out (PIO_DATA_A), a
     djnz tx_bit
 
-    ld (assert_val), a
+    ;ld (assert_val), a
     pop bc
     ret
 
@@ -96,7 +98,7 @@ tx_high:
     out (PIO_DATA_A), a
     djnz tx_bit
 
-    ld (assert_val), a
+    ;ld (assert_val), a
     pop bc
     ret
 
@@ -137,7 +139,7 @@ miso_not_high:
 
     djnz rx_bit
 
-    ld (assert_val), a
+    ;ld (assert_val), a
     ld a, c
     pop bc
     ret
@@ -217,6 +219,20 @@ fujinet_hal_wait_cmd_ready_timeout:
     jr fujinet_hal_wait_cmd_ready_timeout
 
 SECTION data_user
-
 assert_val:
     DEFB 0
+
+
+SECTION code_user
+
+fujinet_poll_proceed:
+    in a, (PIO_DATA_B)
+    and MASK_PROCEED
+    jr z, proceed_asserted
+
+    ld a, 0
+    ret
+
+proceed_asserted:
+    ld a, 1
+    ret

@@ -52,5 +52,10 @@ uint8_t fujinet_checksum(uint8_t *buf, uint16_t len);
  */
 FUJINET_RC fujinet_dcb_exec(struct fujinet_dcb *dcb) __z88dk_fastcall;
 
-
+/**
+ * poll the PROCEED line
+ *
+ * true = data waiting
+ */
+int fujinet_poll_proceed(void) __z88dk_fastcall;
 #endif /* FUJINET_H */

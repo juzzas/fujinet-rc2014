@@ -4,9 +4,11 @@
 
 EXTERN fujinet_init
 EXTERN fujinet_dcb_exec
+EXTERN fujinet_poll_proceed
 
 PUBLIC _fujinet_init
 PUBLIC _fujinet_dcb_exec
+PUBLIC _fujinet_poll_proceed
 
 SECTION code_user
 
@@ -41,5 +43,11 @@ _fujinet_dcb_exec:
     pop iy
     ret
 
+
+_fujinet_poll_proceed:
+    call fujinet_poll_proceed
+    ld h, 0
+    ld l, a
+    ret
 
 
