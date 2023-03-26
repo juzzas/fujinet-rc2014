@@ -18,8 +18,8 @@ FUJINET_RC write_devices(void) {
 }
 
 DeviceSlot* get_device_at(int i) {
-    if (i < FUJINET_MAX_DEVICE_SLOTS)
-        return &devices[i];
+    if (i > 0 && i <= FUJINET_MAX_DEVICE_SLOTS)
+        return &devices[i-1];
 
     return NULL;
 }

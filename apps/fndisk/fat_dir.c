@@ -3,21 +3,22 @@
 //
 
 #include "fat_dir.h"
-#include "diskio_fn.h"
-#include <lib/rc2014/ff.h>
+#include "ff/diskio_fn.h"
+#include "ff/ff.h"
 #include <stdio.h>
 #include <string.h>
 
+DIR dir;
 
 FRESULT scan_files (
     char* path        /* Start node to be scanned (***also used as work area***) */
     )
 {
     FRESULT res;
-    DIR dir;
     UINT i;
     static FILINFO fno;
 
+    printf("scan_files: %s\n", path);
 
     res = f_opendir(&dir, path);                       /* Open the directory */
     if (res == FR_OK) {
@@ -37,18 +38,21 @@ FRESULT scan_files (
         f_closedir(&dir);
     }
 
+    printf("scan_files: res %d\n", res);
+
     return res;
 }
 
 
+FATFS fs;
+FRESULT res;
+char buff[256];
+
+
 FUJINET_RC do_fat_dir(void)
 {
-    FATFS fs;
-    FRESULT res;
-    char buff[256];
-
-
-    res = f_mount(&fs, "", 1);
+	memset(&fs, 0, sizeof(FATFS));
+    res = f_mount(&fs, "0:", 0);
     if (res == FR_OK) {
         strcpy(buff, "/");
         res = scan_files(buff);

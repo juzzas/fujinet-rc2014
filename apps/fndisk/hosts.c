@@ -18,8 +18,8 @@ FUJINET_RC write_hosts(void) {
 }
 
 HostSlot* get_host_at(int i) {
-    if (i < FUJINET_MAX_HOST_SLOTS)
-        return &hosts[i];
+    if (i > 0 && i <= FUJINET_MAX_HOST_SLOTS)
+        return &hosts[i-1];
 
     return NULL;
 }

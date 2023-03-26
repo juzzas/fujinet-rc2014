@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 //    clrscr();
 
     printf("FNPIP - The PIP for FujiNet\n");
+    fujinet_init();
 
     if (argc == 1) {
         printf("Usage: FNPIP <DEST>=<SRC#1>,<SRC#2>,...,<SRC#N>\n");

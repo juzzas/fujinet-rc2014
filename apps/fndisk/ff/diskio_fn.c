@@ -14,6 +14,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "diskio_fn.h"           /* Type definitions */
 
@@ -52,10 +53,13 @@ DSTATUS disk_initialize (
 ) __smallc __z88dk_fastcall
 #endif
 {
+    printf("disk_initialize: drive %d\n", pdrv);
     //if ( hbios_a( BF_DIOSTATUS<<8|pdrv) == RES_OK ) return RES_OK;
     //return hbios_a( BF_DIORESET<<8|pdrv);
 
-    return RES_OK;
+    //TODO: determine disk mounted or write protect
+
+    return 0;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -72,6 +76,9 @@ DSTATUS disk_status (
 ) __smallc __z88dk_fastcall
 #endif
 {
+    printf("disk_status: drive %d\n", pdrv);
+
+//TODO: determine disk mounted or write protect
     return 0;
 }
 
@@ -96,6 +103,8 @@ DRESULT disk_read (
 #endif
 {
     FUJINET_RC rc = FUJINET_RC_OK;
+
+    printf("disk_read: drive %d, sector %d, count %d\n", pdrv, sector, count);
 
     if (count == 0 ) return RES_PARERR;             /* sector count can't be zero */
 
@@ -129,6 +138,8 @@ DRESULT disk_write (
 {
     FUJINET_RC rc = FUJINET_RC_OK;
 
+    printf("disk_write: drive %d, sector %d, count %d\n", pdrv, sector, count);
+
     if (count == 0 ) return RES_PARERR;             /* sector count can't be zero */
 
     for (uint8_t i = 0; (i < count) && (rc == FUJINET_RC_OK); i++) {
@@ -160,6 +171,8 @@ DRESULT disk_ioctl (
 
     DRESULT resp = RES_ERROR;
 
+    printf("disk_ioctl: drive %d, cmd %d\n", pdrv, cmd);
+
     switch (cmd) {
         case CTRL_SYNC :            /* Make sure that no pending write process */
             resp = RES_OK;
@@ -167,6 +180,7 @@ DRESULT disk_ioctl (
 
         case GET_SECTOR_COUNT :     /* Get number of sectors on the disk (DWORD) */
             //*(uint32_t*)buff = hbios( BF_DIOCAP<<8|pdrv );
+            *(uint32_t*)buff = 80 * 2 * 18; // number of sectors for 1.44MB floppy
             resp = RES_OK;
             break;
 

@@ -7,4 +7,7 @@ disk_status.c
 devices.c
 hosts.c
 fat_dir.c
-diskio_fn.c
+ff/diskio_fn.c
+ff/ff.c
+ff/ffsystem.c
+ff/ffunicode.c
