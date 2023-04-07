@@ -3,6 +3,7 @@ TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
 #TARGET=+cpm -clib=sdcc_iy --max-allocs-per-node200000
 
 SUB_TARGET=-Ilib/include
+DRV_FUJINET=@lib/driver_rc2014_spi.lst
 LIB_FUJINET=@lib/driver_rc2014_spi.lst @lib/lib_rc2014_cpm.lst
 
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
@@ -46,7 +47,7 @@ fndisk:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fndisk/fndisk.lst ${LIB_FUJINET} -o fndisk.com -create-app
 
 fnrsx:
-	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst
+	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst ${DRV_FUJINET}
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.com -create-app
 
 
