@@ -14,9 +14,11 @@
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 DEFC FUJINET_FN_BASE = 0xf0
+DEFC BDOS = 5
 
 EXTERN fujinet_init
 EXTERN fujinet_dcb_exec
+EXTERN patch_bios
 
 ORG 0x100
 
@@ -34,7 +36,7 @@ loader:   defb 0           ; loader flag
 
 bdos_handler:
     ld a, c
-    cp 0xf0
+    cp FUJINET_FN_BASE
     jr z, handle_bdos_fujinet_dcb
     jp next
 
@@ -49,10 +51,18 @@ handle_bdos_fujinet_dcb:
     jr nz, init_done
     call fujinet_init
 
+    call patch_bios
+    ld hl, log_boot
+    call display_message
+
     ld a, 0xff  ; mark as initialised
     ld (flag_initialised), a
 
 init_done:
+    ld a, d ; de is zero, just initialise?
+    or e
+    ret z
+
     ld hl, de
     call fujinet_dcb_exec
     ret
@@ -61,3 +71,27 @@ flag_initialised:
     defb 0
 
 
+;;------------------------------------------------------------------------
+
+display_char:
+ push hl
+ ld c,2			;; console output function id
+ ld e,a			;; ASCII character
+ call BDOS		;; call BDOS to execute function
+ pop hl
+ ret
+
+ ;;------------------------------------------------------------------------
+
+ ;; HL = pointer to null terminated message
+display_message:
+ ld a,(hl)				;; get ASCII character
+ inc hl					;; increment pointer for next character
+ cp '$'					;; end of message marker
+ ret z					;; quit if end of message marker found.
+
+ call display_char		;; send character to console output
+ jp display_message		;; loop for next char
+
+log_boot:
+ defb "FujiNet initialised$"

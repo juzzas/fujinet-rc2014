@@ -26,6 +26,8 @@
 #include <arch/cpm.h>
 #include <z80.h>
 
+#pragma output REGISTER_SP           = 0xd000    // place stack at $d000 at startup
+
 #define DEBUG
 
 void main(void) {

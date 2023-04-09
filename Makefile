@@ -49,6 +49,7 @@ fndisk:
 fnrsx:
 	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst ${DRV_FUJINET}
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.com -create-app
+	reloc2prl -r fnrsx_driver.reloc -o fnrsx.rsx fnrsx_driver.bin
 
 
 clean:
