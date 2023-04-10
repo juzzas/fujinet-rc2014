@@ -13,11 +13,13 @@
 ; COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-DEFC FUJINET_FN_BASE = 0xf0
+DEFC FUJINET_FN_DCB = 0xf0
+DEFC FUJINET_FN_POLL = 0xf1
 DEFC BDOS = 5
 
 EXTERN fujinet_init
 EXTERN fujinet_dcb_exec
+EXTERN fujinet_poll_proceed
 EXTERN patch_bios
 
 ORG 0x100
@@ -36,11 +38,16 @@ loader:   defb 0           ; loader flag
 
 bdos_handler:
     ld a, c
-    cp FUJINET_FN_BASE
+
+    cp FUJINET_FN_DCB
     jr z, handle_bdos_fujinet_dcb
+
+    cp FUJINET_FN_POLL
+    jr z, handle_bdos_fujinet_poll_proceed
+
     jp next
 
-
+;;------------------------------------------------------------------------
 
 ; entry: de = address of FujiNet DCB command
 ; uses: ix, bc, hl, a, a'
@@ -70,6 +77,15 @@ init_done:
 flag_initialised:
     defb 0
 
+
+;;------------------------------------------------------------------------
+
+; entry: none
+; uses: ix, bc, hl, a, a'
+; exit: a = 1: asserted, 0: not asserted
+handle_bdos_fujinet_poll_proceed:
+    call fujinet_poll_proceed
+    ret
 
 ;;------------------------------------------------------------------------
 

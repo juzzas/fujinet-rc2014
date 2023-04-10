@@ -4,7 +4,7 @@ TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy --max-allocs-per-node200000
 
 SUB_TARGET=-Ilib/include
 DRV_FUJINET=@lib/driver_rc2014_spi.lst
-LIB_FUJINET=@lib/driver_rc2014_spi.lst @lib/lib_rc2014_cpm.lst
+LIB_FUJINET=@lib/driver_rc2014_cpm.lst @lib/lib_rc2014_cpm.lst
 
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
