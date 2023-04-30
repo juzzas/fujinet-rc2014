@@ -60,6 +60,7 @@ fnrsx22:
 
 
 clean:
-	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def
+	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def *.prl *.rsx
 	find . -name "*.lis" -exec rm {} \;
 	find . -name "*.sym" -exec rm {} \;
+	find . -name "*.o" -exec rm {} \;
