@@ -48,8 +48,15 @@ fndisk:
 
 fnrsx:
 	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst ${DRV_FUJINET}
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.com -create-app
 	reloc2prl -r fnrsx_driver.reloc -o fnrsx.rsx fnrsx_driver.bin
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx.lst -o fnrsx.com -create-app
+
+fnrsx22:
+	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -DCPM_22 -ofnrsx_driver22.bin @apps/fnrsx/fnrsx_driver.lst ${DRV_FUJINET}
+	reloc2prl -r fnrsx_driver22.reloc -o fnrsx22.prl fnrsx_driver22.bin
+	sync
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnrsx/fnrsx_ldr22.lst -o fnrsx22.com -create-app
+	cp fnrsx22.bin fnrsx22.com
 
 
 clean:
