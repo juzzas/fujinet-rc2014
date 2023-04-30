@@ -1,5 +1,5 @@
-fnrsx_main.asm
-asm_z80_delay_ms.asm
-asm_z80_delay_tstate.asm
-fnrsx_bios.asm
-fnrsx_bios_disk.asm
+common/fnrsx_main.asm
+common/asm_z80_delay_ms.asm
+common/asm_z80_delay_tstate.asm
+common/fnrsx_bios.asm
+common/fnrsx_bios_disk.asm

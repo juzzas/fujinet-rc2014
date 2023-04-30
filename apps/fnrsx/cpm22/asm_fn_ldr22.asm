@@ -11,6 +11,6 @@ _fn_payload_size:
     DEFW fn_payload_end - fn_payload
 
 fn_payload:
-    INCBIN "../../fnrsx22.prl"
+    INCBIN "../../../fnrsx22.prl"
 fn_payload_end:
 
