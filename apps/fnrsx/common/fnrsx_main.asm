@@ -15,6 +15,7 @@
 
 DEFC FUJINET_FN_DCB = 0xf0
 DEFC FUJINET_FN_POLL = 0xf1
+DEFC FUJINET_FN_CHAIN = 0xf2
 DEFC BDOS = 5
 
 EXTERN fujinet_init
@@ -22,6 +23,7 @@ EXTERN fujinet_dcb_exec
 EXTERN fujinet_poll_proceed
 EXTERN init_patch_bdos
 EXTERN patch_bios
+EXTERN chain_load
 
 ORG 0x100
 
@@ -41,10 +43,13 @@ bdos_handler:
     ld a, c
 
     cp FUJINET_FN_DCB
-    jr z, handle_bdos_fujinet_dcb
+    jp z, handle_bdos_fujinet_dcb
 
     cp FUJINET_FN_POLL
-    jr z, handle_bdos_fujinet_poll_proceed
+    jp z, handle_bdos_fujinet_poll_proceed
+
+    cp FUJINET_FN_CHAIN
+    jp z, chain_load
 
     jp next
 
