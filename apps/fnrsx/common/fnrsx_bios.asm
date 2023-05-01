@@ -30,9 +30,25 @@ EXTERN patched_write
 EXTERN patched_sectran
 
 PUBLIC jumpblock_copy
+PUBLIC init_patch_bdos
 PUBLIC patch_bios
 
 ;;-----------------------------------------------------------------------------------------------
+
+init_patch_bdos:
+    push hl
+    ld hl, (0x0006)
+    ld (current_bdos), hl
+    pop hl
+    ret
+
+patch_bdos:
+    push hl
+    ld hl, (current_bdos)
+    ld (0x0006), hl
+    pop hl
+    ret
+
 
 patch_bios:
 	; Now copy jumpblock and patch it for our use
@@ -48,13 +64,13 @@ patch_bios:
 	pop hl
 
 	;; now patch
-	;;ld bc,cpm_boot
-	;;ld de,patched_boot
-	;;call patch
+	;ld bc,cpm_boot
+	;ld de,patched_boot
+	;call patch
 
-	;;ld bc,cpm_wboot
-	;;ld de,patched_wboot
-	;;call patch
+	;ld bc,cpm_wboot
+	;ld de,patched_wboot
+	;call patch
 
 ;	ld bc,cpm_home
 ;	ld de,patched_home
@@ -129,7 +145,7 @@ patched_wboot:
 	;; do normal wboot
 	call jumpblock_copy+cpm_wboot
 	;; repatch jump block
-	;call patch_bdos
+	call patch_bdos
 	call patch_bios
 	ret
 
@@ -138,4 +154,5 @@ patched_wboot:
 jumpblock_copy:
 	defs cpm_bdos_jumpblock_size
 
-
+current_bdos:
+    defw 0

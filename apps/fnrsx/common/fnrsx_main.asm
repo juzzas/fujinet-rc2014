@@ -20,6 +20,7 @@ DEFC BDOS = 5
 EXTERN fujinet_init
 EXTERN fujinet_dcb_exec
 EXTERN fujinet_poll_proceed
+EXTERN init_patch_bdos
 EXTERN patch_bios
 
 ORG 0x100
@@ -58,7 +59,9 @@ handle_bdos_fujinet_dcb:
     jr nz, init_done
     call fujinet_init
 
+    call init_patch_bdos
     call patch_bios
+
     ld hl, log_boot
     call display_message
 
@@ -90,24 +93,24 @@ handle_bdos_fujinet_poll_proceed:
 ;;------------------------------------------------------------------------
 
 display_char:
- push hl
- ld c,2			;; console output function id
- ld e,a			;; ASCII character
- call BDOS		;; call BDOS to execute function
- pop hl
- ret
+    push hl
+    ld c,2			;; console output function id
+    ld e,a			;; ASCII character
+    call BDOS		;; call BDOS to execute function
+    pop hl
+    ret
 
  ;;------------------------------------------------------------------------
 
  ;; HL = pointer to null terminated message
 display_message:
- ld a,(hl)				;; get ASCII character
- inc hl					;; increment pointer for next character
- cp '$'					;; end of message marker
- ret z					;; quit if end of message marker found.
+    ld a,(hl)				;; get ASCII character
+    inc hl					;; increment pointer for next character
+    cp '$'					;; end of message marker
+    ret z					;; quit if end of message marker found.
 
- call display_char		;; send character to console output
- jp display_message		;; loop for next char
+    call display_char		;; send character to console output
+    jp display_message		;; loop for next char
 
 log_boot:
- defb "FujiNet initialised$"
+    defb "FujiNet initialised$"
