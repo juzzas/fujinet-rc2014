@@ -16,6 +16,7 @@
 DEFC FUJINET_FN_DCB = 0xf0
 DEFC FUJINET_FN_POLL = 0xf1
 DEFC FUJINET_FN_CHAIN = 0xf2
+DEFC L_WRITE = 0x05
 DEFC BDOS = 5
 
 EXTERN fujinet_init
@@ -24,6 +25,11 @@ EXTERN fujinet_poll_proceed
 EXTERN init_patch_bdos
 EXTERN patch_bios
 EXTERN chain_load
+
+EXTERN asm_drv_printer_init
+EXTERN asm_drv_printer_flush
+EXTERN asm_drv_modem_flush
+EXTERN handle_bdos_l_write
 
 ORG 0x100
 
@@ -40,6 +46,7 @@ loader:   defb 0           ; loader flag
 
 
 bdos_handler:
+    ; override check
     ld a, c
 
     cp FUJINET_FN_DCB
@@ -48,8 +55,15 @@ bdos_handler:
     cp FUJINET_FN_POLL
     jp z, handle_bdos_fujinet_poll_proceed
 
-    cp FUJINET_FN_CHAIN
-    jp z, chain_load
+    ;cp FUJINET_FN_CHAIN
+    ;jp z, chain_load
+
+    cp L_WRITE
+    jp z, handle_bdos_l_write
+
+    ; else, just flush any pending buffers
+    call asm_drv_printer_flush
+    ;call asm_drv_modem_flush
 
     jp next
 
@@ -66,6 +80,9 @@ handle_bdos_fujinet_dcb:
 
     call init_patch_bdos
     call patch_bios
+
+    call asm_drv_printer_init
+    ;call asm_drv_modem_init
 
     ld hl, log_boot
     call display_message

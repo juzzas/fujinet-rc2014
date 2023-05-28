@@ -35,7 +35,7 @@ void main(void) {
     printf("new bdos = 0x%04x\n", z80_wpeek(0x0006));
 #endif
 
-    int rc = cpm_bdos(0xf0, 0); // fujinet_init
+    //int rc = cpm_bdos(0xf0, 0); // fujinet_init
 
     puts("FujiNet RSX installed");
 }
