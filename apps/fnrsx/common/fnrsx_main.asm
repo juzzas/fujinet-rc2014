@@ -63,8 +63,8 @@ bdos_handler:
     ;cp FUJINET_FN_CHAIN
     ;jp z, chain_load
 
-    ;cp L_WRITE
-    ;jp z, handle_bdos_l_write
+    cp L_WRITE
+    jp z, handle_bdos_l_write
 
     ; else, just flush any pending buffers
     push af

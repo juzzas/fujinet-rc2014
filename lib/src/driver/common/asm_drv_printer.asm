@@ -20,14 +20,18 @@ asm_drv_printer_init:
 ; entry:
 ;   E = character
 asm_drv_printer_put_char:
+    push ix
     ld ix, ctx_printer
-    jp asm_buffer_tx_char
+    call asm_buffer_tx_char
+    pop ix
+    ret
 
 asm_drv_printer_flush:
     push ix
     ld ix, ctx_printer
     call asm_buffer_tx_flush
     pop ix
+    ret
 
 SECTION data_user
 
