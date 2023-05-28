@@ -46,6 +46,11 @@ loader:   defb 0           ; loader flag
 
 
 bdos_handler:
+    ; initialise RSX
+    ld a,(flag_initialised)
+    or a
+    call z, do_init
+
     ; override check
     ld a, c
 
@@ -58,24 +63,32 @@ bdos_handler:
     ;cp FUJINET_FN_CHAIN
     ;jp z, chain_load
 
-    cp L_WRITE
-    jp z, handle_bdos_l_write
+    ;cp L_WRITE
+    ;jp z, handle_bdos_l_write
 
     ; else, just flush any pending buffers
+    push af
+    push bc
+    push de
+    push hl
+    push ix
     call asm_drv_printer_flush
     ;call asm_drv_modem_flush
+    pop ix
+    pop hl
+    pop de
+    pop bc
+    pop af
 
     jp next
 
 ;;------------------------------------------------------------------------
 
-; entry: de = address of FujiNet DCB command
-; uses: ix, bc, hl, a, a'
-; exit: a = return code (FUJINET_RC)
-handle_bdos_fujinet_dcb:
-    ld a,(flag_initialised)
-    or a
-    jr nz, init_done
+do_init:
+    push de
+    push bc
+    push hl
+    push ix
     call fujinet_init
 
     call init_patch_bdos
@@ -89,8 +102,18 @@ handle_bdos_fujinet_dcb:
 
     ld a, 0xff  ; mark as initialised
     ld (flag_initialised), a
+    pop ix
+    pop hl
+    pop bc
+    pop de
+    ret
 
-init_done:
+;;------------------------------------------------------------------------
+
+; entry: de = address of FujiNet DCB command
+; uses: ix, bc, hl, a, a'
+; exit: a = return code (FUJINET_RC)
+handle_bdos_fujinet_dcb:
     ld a, d ; de is zero, just initialise?
     or e
     ret z
@@ -118,7 +141,7 @@ display_char:
     push hl
     ld c,2			;; console output function id
     ld e,a			;; ASCII character
-    call BDOS		;; call BDOS to execute function
+    call next		;; call BDOS to execute function
     pop hl
     ret
 
@@ -135,4 +158,4 @@ display_message:
     jp display_message		;; loop for next char
 
 log_boot:
-    defb "FujiNet initialised$"
+    defb "FujiNet RSX initialised", 13, 10, "$"

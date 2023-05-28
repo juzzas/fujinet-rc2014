@@ -24,13 +24,15 @@ asm_drv_printer_put_char:
     jp asm_buffer_tx_char
 
 asm_drv_printer_flush:
+    push ix
     ld ix, ctx_printer
-    jp asm_buffer_tx_flush
+    call asm_buffer_tx_flush
+    pop ix
 
 SECTION data_user
 
 ctx_printer:
-    DEFS 4
+    DEFB 0, 0, 0, 0
 
 ctx_printer_buffer:
     DEFS 64
