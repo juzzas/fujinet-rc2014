@@ -31,8 +31,10 @@ asm_drv_printer_put_char:
 
 asm_drv_printer_flush:
     push ix
+    push hl
     ld ix, ctx_printer
     call asm_buffer_tx_flush
+    pop hl
     pop ix
     ret
 
@@ -44,3 +46,5 @@ ctx_printer:
 ctx_printer_buffer:
     DEFS 64
 
+ctx_print_enable:
+    DEFB 0

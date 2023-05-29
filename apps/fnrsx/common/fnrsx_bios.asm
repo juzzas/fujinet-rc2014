@@ -167,10 +167,12 @@ patched_wboot:
 ;;    CONOUT (function 4)
 ;;    Write the character in C to the screen.
 patched_conout:
+    push bc
     call asm_drv_printer_flush
     ;call asm_drv_modem_flush
-    call jumpblock_copy+cpm_conout
-    ret
+    pop bc
+    jp jumpblock_copy+cpm_conout
+
 
 ;;------------------------------------------------------------------------------------------------------------
 ;; From seasip.info:

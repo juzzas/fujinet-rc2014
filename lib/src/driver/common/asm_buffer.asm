@@ -50,6 +50,7 @@ inc_context_buffer_index:
 ;   IX = context pointer
 asm_buffer_tx_char:
     ; put character at index and increment index
+    push hl
     call get_context_buffer_index_ptr
     ld (hl), c
     call inc_context_buffer_index
@@ -57,7 +58,8 @@ asm_buffer_tx_char:
     ; is buffer full?
     ld a, (ix+CTX_OFFSET_BUFFER_LEN)
     cp 64
-    jp z, asm_buffer_tx_flush
+    call z, asm_buffer_tx_flush
+    pop hl
     ret
 
 
@@ -119,11 +121,18 @@ asm_buffer_tx_flush:
     inc hl
 
 ;    uint16_t timeout;   // milliseconds
+    push de
     ld de, 15000
     ld (hl), e
     inc hl
     ld (hl), d
     inc hl
+    pop de
+
+    ; reset index
+    xor a
+    ld (ix+CTX_OFFSET_BUFFER_LEN), a
+
 
     ; send to fujinet!
     push ix
@@ -134,10 +143,6 @@ asm_buffer_tx_flush:
     pop bc
     pop de
     pop ix
-
-    ; reset index
-    xor a
-    ld (ix+CTX_OFFSET_BUFFER_LEN), a
 
     ret
 
