@@ -8,17 +8,20 @@ PUBLIC asm_drv_printer_flush
 
 SECTION code_user
 
-DEFC PRINTER_DEV_ID = 0x40
+DEFC PRINTER_DEV_ID = 0x41
 
 asm_drv_printer_init:
+    push ix
     ld ix, ctx_printer
     ld a, PRINTER_DEV_ID
     ld de, ctx_printer_buffer
-    jp asm_buffer_init
+    call asm_buffer_init
+    pop ix
+    ret
 
 
 ; entry:
-;   E = character
+;   C = character
 asm_drv_printer_put_char:
     push ix
     ld ix, ctx_printer

@@ -63,23 +63,6 @@ bdos_handler:
     ;cp FUJINET_FN_CHAIN
     ;jp z, chain_load
 
-    cp L_WRITE
-    jp z, handle_bdos_l_write
-
-    ; else, just flush any pending buffers
-    push af
-    push bc
-    push de
-    push hl
-    push ix
-    call asm_drv_printer_flush
-    ;call asm_drv_modem_flush
-    pop ix
-    pop hl
-    pop de
-    pop bc
-    pop af
-
     jp next
 
 ;;------------------------------------------------------------------------

@@ -5,6 +5,8 @@ DEFC drive_user = 4
 
 DEFC cpm_boot = 0
 DEFC cpm_wboot = 0+3
+DEFC cpm_conout = 9+3
+DEFC cpm_list = 12+3
 DEFC cpm_home = 21+3
 DEFC cpm_seldsk = 24+3
 DEFC cpm_settrk = 27+3
@@ -28,6 +30,9 @@ EXTERN patched_setdma
 EXTERN patched_read
 EXTERN patched_write
 EXTERN patched_sectran
+
+EXTERN asm_drv_printer_put_char
+EXTERN asm_drv_printer_flush
 
 PUBLIC jumpblock_copy
 PUBLIC init_patch_bdos
@@ -71,6 +76,14 @@ patch_bios:
 	;ld bc,cpm_wboot
 	;ld de,patched_wboot
 	;call patch
+
+	ld bc,cpm_conout
+	ld de,patched_conout
+	call patch
+
+	ld bc,cpm_list
+	ld de,patched_list
+	call patch
 
 ;	ld bc,cpm_home
 ;	ld de,patched_home
@@ -148,6 +161,23 @@ patched_wboot:
 	call patch_bdos
 	call patch_bios
 	ret
+
+;;------------------------------------------------------------------------------------------------------------
+;; From seasip.info:
+;;    CONOUT (function 4)
+;;    Write the character in C to the screen.
+patched_conout:
+    call asm_drv_printer_flush
+    ;call asm_drv_modem_flush
+    call jumpblock_copy+cpm_conout
+    ret
+
+;;------------------------------------------------------------------------------------------------------------
+;; From seasip.info:
+;;    LIST (function 5)
+;;    Write the character in C to the printer. If the printer isn't ready, wait until it is.
+patched_list:
+    jp asm_drv_printer_put_char
 
 ;;------------------------------------------------------------------------
 

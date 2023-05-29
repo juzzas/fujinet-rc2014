@@ -46,12 +46,12 @@ inc_context_buffer_index:
 
 
 ; Entry:
-;   E = char to send
+;   C = char to send
 ;   IX = context pointer
 asm_buffer_tx_char:
     ; put character at index and increment index
     call get_context_buffer_index_ptr
-    ld (hl), e
+    ld (hl), c
     call inc_context_buffer_index
 
     ; is buffer full?
@@ -127,9 +127,17 @@ asm_buffer_tx_flush:
 
     ; send to fujinet!
     push ix
+    push de
+    push bc
     ld hl, buffer_fujinet_dcb
     call fujinet_dcb_exec
+    pop bc
+    pop de
     pop ix
+
+    ; reset index
+    xor a
+    ld (ix+CTX_OFFSET_BUFFER_LEN), a
 
     ret
 
