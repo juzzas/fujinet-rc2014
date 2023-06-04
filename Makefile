@@ -47,6 +47,9 @@ fndisk:
 fnlogin:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnlogin/fnlogin.lst ${LIB_FUJINET} -o fnlogin.com -create-app
 
+ptest:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/printtest/printtest.lst ${LIB_FUJINET} -o ptest.com -create-app
+
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM
 	find . -name "*.lis" -exec rm {} \;
