@@ -94,6 +94,7 @@ asm_buffer_tx_flush:
 ;    uint8_t *buffer;
     ld a, (ix+CTX_OFFSET_BUFFER_ADDRL)
     ld (hl), a
+    inc hl
     ld a, (ix+CTX_OFFSET_BUFFER_ADDRH)
     ld (hl), a
     inc hl
