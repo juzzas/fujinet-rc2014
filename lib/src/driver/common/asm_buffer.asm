@@ -148,6 +148,161 @@ asm_buffer_tx_flush:
     ret
 
 
+; Receive buffer from fujinet
+;   -- assume CTX_OFFSET_BUFFER_LEN holds length of data to read
+; Entry:
+;   IX = context pointer
+do_buffer_rx_read:
+;    uint8_t device;
+    ld hl, buffer_fujinet_dcb
+    ld a, (ix+CTX_OFFSET_DEVICE_ID)
+    ld (hl), a
+    inc hl
+
+;    uint8_t command;
+    ld (hl), 'R'
+    inc hl
+
+;    uint8_t aux1;
+    ld a, (ix+CTX_OFFSET_BUFFER_LEN)
+    ld (hl), a
+    inc hl
+
+;    uint8_t aux2;
+    xor a
+    ld (hl), a
+    inc hl
+
+;    uint8_t *buffer;
+    xor a
+    ld (hl), a
+    inc hl
+    ld (hl), a
+    inc hl
+
+;    uint16_t buffer_bytes; // data length in bytes
+    xor a
+    ld (hl), a
+    inc hl
+    ld (hl), a
+    inc hl
+
+;    uint8_t *response;
+    ld a, (ix+CTX_OFFSET_BUFFER_ADDRL)
+    ld (hl), a
+    inc hl
+    ld a, (ix+CTX_OFFSET_BUFFER_ADDRH)
+    ld (hl), a
+    inc hl
+
+;    uint16_t response_bytes; // data length in bytes
+    ld a, (ix+CTX_OFFSET_BUFFER_LEN)
+    ld (hl), a
+    inc hl
+    xor a
+    ld (hl), a
+    inc hl
+
+;    uint16_t timeout;   // milliseconds
+    push de
+    ld de, 15000
+    ld (hl), e
+    inc hl
+    ld (hl), d
+    inc hl
+    pop de
+
+    ; send to fujinet!
+    push ix
+    push de
+    push bc
+    ld hl, buffer_fujinet_dcb
+    call fujinet_dcb_exec
+    pop bc
+    pop de
+    pop ix
+
+    ret
+
+
+; Receive availability from fujinet
+;   -- assume CTX_OFFSET_BUFFER_LEN holds length of data to read
+; Entry:
+;   IX = context pointer
+do_buffer_rx_avail:
+;    uint8_t device;
+    ld hl, buffer_fujinet_dcb
+    ld a, (ix+CTX_OFFSET_DEVICE_ID)
+    ld (hl), a
+    inc hl
+
+;    uint8_t command;
+    ld (hl), 'R'
+    inc hl
+
+;    uint8_t aux1;
+    xor a
+    ld (hl), a
+    inc hl
+
+;    uint8_t aux2;
+    xor a
+    ld (hl), a
+    inc hl
+
+;    uint8_t *buffer;
+    xor a
+    ld (hl), a
+    inc hl
+    ld (hl), a
+    inc hl
+
+;    uint16_t buffer_bytes; // data length in bytes
+    xor a
+    ld (hl), a
+    inc hl
+    ld (hl), a
+    inc hl
+
+;    uint8_t *response;
+    push de
+    ld de, buffer_fujinet_status
+    ld (hl), e
+    inc hl
+    ld (hl), d
+    inc hl
+    pop de
+
+;    uint16_t response_bytes; // data length in bytes
+    ld a, 4
+    ld (hl), a
+    inc hl
+    xor a
+    ld (hl), a
+    inc hl
+
+;    uint16_t timeout;   // milliseconds
+    push de
+    ld de, 15000
+    ld (hl), e
+    inc hl
+    ld (hl), d
+    inc hl
+    pop de
+
+    ; send to fujinet!
+    push ix
+    push de
+    push bc
+    ld hl, buffer_fujinet_dcb
+    call fujinet_dcb_exec
+    pop bc
+    pop de
+    pop ix
+
+    ld a,
+
+    ret
 
 SECTION data_user
 
@@ -164,3 +319,6 @@ SECTION data_user
 ;};
 buffer_fujinet_dcb:
     DEFS 14
+
+buffer_fujinet_status:
+    DEFS 4
