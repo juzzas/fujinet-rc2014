@@ -1,0 +1,4 @@
+src/hal/acia/hal_spi-rev0.asm
+src/hal/acia/hal_console.asm
+src/asm_fujinet_spi-rev0.asm
+src/fujinet.asm

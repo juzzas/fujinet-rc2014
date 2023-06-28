@@ -42,6 +42,6 @@ uint8_t console_rx_avail(void) __z88dk_fastcall;
  *
  * @param s string (NUL terminated) to output
  */
-void console_puts(uint8_t *s) __z88dk_fastcall;
+void console_puts(const uint8_t* s) __z88dk_fastcall;
 
 #endif //FUJINET_RC2014_CONSOLE_HAL_H
