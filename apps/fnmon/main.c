@@ -6,22 +6,17 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "cmd.h"
 #include "console.h"
 
 #define MAX_COMMAND_LENGTH 100
 #define MAX_TOKENS 10
 #define MAX_ERROR_MESSAGE_LENGTH 100
 
-//#pragma printf = "xc"     // enables %s, %c, %u, %f only 
+#pragma scanf = "%["
+#pragma printf = "%x %s %d"
 
 static bool done = false;
-
-// Function prototypes
-enum CommandResult {
-    COMMAND_SUCCESS,
-    COMMAND_ERROR_INVALID_ARGUMENTS,
-    COMMAND_ERROR_UNKNOWN_COMMAND,
-};
 
 enum CommandResult process_command(const char* command);
 void read_line(char* buffer, int max_length);
@@ -31,10 +26,8 @@ enum CommandResult execute_command(const char* command, char* tokens[], int num_
 void console_put_uint8(uint8_t value);
 void console_put_uint16(uint16_t value);
 
-// command functions
+// core command functions
 enum CommandResult help_command(char* tokens[], int num_tokens);
-enum CommandResult time_command(char* tokens[], int num_tokens);
-enum CommandResult dump_command(char* tokens[], int num_tokens);
 
 // VT102 Escape Sequences
 #define VT102_ESCAPE "\x1B"
@@ -78,9 +71,9 @@ typedef struct {
 
 // Command list
 Command command_list[] = {
-        {"help", "Display available commands", help_command},
-        {"time", "Display current time", time_command},
-        {"dump", "memory dump", dump_command},
+        {"help", "Display available commands", cmd_help},
+        {"time", "Display current time", cmd_time},
+        {"dump", "memory dump", cmd_dump},
         // Add more commands here
 };
 
@@ -90,47 +83,12 @@ char history_commands[MAX_HISTORY_COMMANDS][MAX_COMMAND_LENGTH];
 int history_index = 0;
 
 // Command functions
-enum CommandResult help_command(char* tokens[], int num_tokens) {
+enum CommandResult cmd_help(char* tokens[], int num_tokens) {
     // Print the list of available commands and their help texts
     for (int i = 0; i < sizeof(command_list) / sizeof(Command); i++) {
         console_puts(command_list[i].keyword);
         console_puts(": ");
         console_puts(command_list[i].help);
-        console_puts("\n");
-    }
-
-    return COMMAND_SUCCESS;
-}
-
-enum CommandResult time_command(char* tokens[], int num_tokens) {
-    // TODO: Implement the time command logic here
-    puts("Current time: ...");
-
-    return COMMAND_SUCCESS;
-}
-
-enum CommandResult dump_command(char* tokens[], int num_tokens) {
-    // Using the start address (in hex) of the first argument token,
-    // Produce a memory dump in lines of 16 bytes
-    // Example: dump 0x2000
-    uint16_t start_address = strtol(tokens[1], NULL, 16);
-    uint8_t* memory = (uint8_t*)start_address;
-
-
-    for (uint16_t dump_index = 0; dump_index < 256; dump_index += 16) {
-        console_put_uint16(start_address);
-        console_puts(": ");
-
-        for (uint16_t index = start_address + dump_index; index < start_address + dump_index + 16; index++) {
-            console_put_uint8(memory[index]);
-        }
-
-        console_puts(" ");
-
-        for (uint16_t index = start_address + dump_index; index < start_address + dump_index + 16; index++) {
-            console_tx(memory[index] >= ' ' && memory[index] <= '~' ? memory[index] : '.');
-        }
-
         console_puts("\n");
     }
 
@@ -190,21 +148,24 @@ void console_put_buffer(const char* buffer, int length) {
 }
 
 void read_line(char* buffer, int max_length) {
+    fflush(stdin);
+    scanf("%80[^\n\x1a]", buffer);
+
+#if 0
     int buffer_index = 0;
     int cursor_index = 0;
     char c;
 
     while (true) {
-        if (console_rx_avail()) {
-            c = console_rx();
+            c = fgetc(stdin);
 
-            if (c == 13) {
+            if (c == '\n') {
                 break;
             } else if (c == 0x1B) { // ESC key pressed
                 // Handle VT102 control sequences
                 char seq[3];
-                seq[0] = console_rx();
-                seq[1] = console_rx();
+                seq[0] = fgetc(stdin);
+                seq[1] = fgetc(stdin);
                 seq[2] = '\0';
 
                 if (strcmp(seq, "[A") == 0) { // Up arrow key pressed
@@ -242,7 +203,7 @@ void read_line(char* buffer, int max_length) {
                     }
                 } else {
                     // Ignore unrecognized VT102 control sequences
-                    console_rx();
+                    fgetc(stdin);
                 }
             } else if (c == 0x7F || c == '\b') { // Backspace key pressed
                 if (buffer_index > 0) {
@@ -281,13 +242,13 @@ void read_line(char* buffer, int max_length) {
                 vt102_cursor_left(buffer_index - cursor_index);
             }
         }
-    }
 
     // Null-terminate the buffer
     buffer[buffer_index] = '\0';
 
     // Move cursor to the next line
     console_puts("\n");
+#endif
 }
 
 void tokenize_command(const char* command, char* tokens[], int* num_tokens) {

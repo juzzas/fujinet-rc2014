@@ -1,1 +1,3 @@
 main.c
+cmd_dump.c
+cmd_time.c
