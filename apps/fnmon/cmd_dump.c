@@ -2,13 +2,11 @@
 // Created by jskists on 03/07/2023.
 //
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "cmd.h"
 #include "console.h"
-
-extern void console_put_uint8(uint8_t value);
-extern void console_put_uint16(uint16_t value);
 
 enum CommandResult cmd_dump(char* tokens[], int num_tokens) {
     // Using the start address (in hex) of the first argument token,
@@ -19,20 +17,17 @@ enum CommandResult cmd_dump(char* tokens[], int num_tokens) {
 
 
     for (uint16_t dump_index = 0; dump_index < 256; dump_index += 16) {
-        console_put_uint16(start_address);
-        console_puts(": ");
+        printf("%x: ", start_address);
 
         for (uint16_t index = start_address + dump_index; index < start_address + dump_index + 16; index++) {
-            console_put_uint8(memory[index]);
+            printf("%02x ", memory[index]);
         }
-
-        console_puts(" ");
 
         for (uint16_t index = start_address + dump_index; index < start_address + dump_index + 16; index++) {
-            console_tx(memory[index] >= ' ' && memory[index] <= '~' ? memory[index] : '.');
+            putchar((memory[index] >= ' ' && memory[index] <= '~' ? memory[index] : '.'));
         }
 
-        console_puts("\n");
+        printf("\n");
     }
 
     return COMMAND_SUCCESS;

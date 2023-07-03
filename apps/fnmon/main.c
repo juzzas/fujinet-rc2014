@@ -23,9 +23,6 @@ void read_line(char* buffer, int max_length);
 void tokenize_command(const char* command, char* tokens[], int* num_tokens);
 enum CommandResult execute_command(const char* command, char* tokens[], int num_tokens);
 
-void console_put_uint8(uint8_t value);
-void console_put_uint16(uint16_t value);
-
 // core command functions
 enum CommandResult help_command(char* tokens[], int num_tokens);
 
@@ -34,31 +31,21 @@ enum CommandResult help_command(char* tokens[], int num_tokens);
 #define VT102_ERASE_LINE (VT102_ESCAPE "[K")
 
 void vt102_cursor_left(int n) {
-    char buffer[5];
-
     if (n == 0)
         return;
 
-    itoa(n, buffer, 10);
-    console_puts(VT102_ESCAPE "[");
-    console_puts(buffer);
-    console_tx('D');
+    printf(VT102_ESCAPE "[%dD", n);
 }
 
 void vt102_cursor_right(int n) {
-    char buffer[5];
-
     if (n == 0)
         return;
 
-    itoa(n, buffer, 10);
-    console_puts(VT102_ESCAPE "[");
-    console_puts(buffer);
-    console_puts("C");
+    printf(VT102_ESCAPE "[%dC", n);
 }
 
 void vt102_erase_line() {
-    console_puts(VT102_ERASE_LINE);
+    printf(VT102_ERASE_LINE);
 }
 
 
@@ -86,10 +73,7 @@ int history_index = 0;
 enum CommandResult cmd_help(char* tokens[], int num_tokens) {
     // Print the list of available commands and their help texts
     for (int i = 0; i < sizeof(command_list) / sizeof(Command); i++) {
-        console_puts(command_list[i].keyword);
-        console_puts(": ");
-        console_puts(command_list[i].help);
-        console_puts("\n");
+        printf("%s: %s\n", command_list[i].keyword, command_list[i].help);
     }
 
     return COMMAND_SUCCESS;
@@ -104,7 +88,7 @@ int main() {
 
     while (!done) {
         // Print the prompt
-        console_puts("> ");
+        printf("> ");
 
         // Read a line of input
         buffer[0] = '\0';
@@ -120,10 +104,7 @@ int main() {
         // Check if there is an error
         if (command_result != COMMAND_SUCCESS) {
             // Format the error message
-            console_puts("Command failed with error code: ");
-            itoa(command_result, buffer, 10);
-            console_puts(buffer);
-            console_puts("\n");
+            printf("Command failed with error code: %d\n", command_result);
         }
     }
 
@@ -139,12 +120,6 @@ enum CommandResult process_command(const char* command) {
 
     // Execute the command and get the result/error code
     return execute_command(tokens[0], tokens, num_tokens);
-}
-
-void console_put_buffer(const char* buffer, int length) {
-    for (int i = 0; i < length; i++) {
-        console_tx(buffer[i]);
-    }
 }
 
 void read_line(char* buffer, int max_length) {
@@ -278,21 +253,5 @@ enum CommandResult execute_command(const char* command, char* tokens[], int num_
 
     // Command not found
     return COMMAND_ERROR_UNKNOWN_COMMAND; // Return an error code
-}
-
-void console_put_uint16(uint16_t value) {
-    // output character for each nibble in value
-    for (int nibble = 0; nibble < 4; nibble++) {
-        uint8_t nibble_value = (value >> (12 - nibble * 4)) & 0xF;
-        console_tx(nibble_value < 10 ? '0' + nibble_value : 'A' + nibble_value - 10);
-    }
-}
-
-void console_put_uint8(uint8_t value) {
-    // output character for each nibble in value
-    for (int nibble = 0; nibble < 2; nibble++) {
-        uint8_t nibble_value = (value >> (12 - nibble * 4)) & 0xF;
-        console_tx(nibble_value < 10 ? '0' + nibble_value : 'A' + nibble_value - 10);
-    }
 }
 
