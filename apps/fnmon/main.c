@@ -36,6 +36,7 @@ typedef struct {
 // Command list
 Command command_list[] = {
         {"help", "Display available commands", cmd_help},
+        {"hosts", "Display list of configured hosts", cmd_hosts},
         {"time", "Display current time", cmd_time},
         {"dump", "memory dump", cmd_dump},
         // Add more commands here

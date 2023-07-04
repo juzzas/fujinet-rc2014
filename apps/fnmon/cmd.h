@@ -11,12 +11,14 @@ enum CommandResult {
     COMMAND_SUCCESS,
     COMMAND_ERROR_INVALID_ARGUMENTS,
     COMMAND_ERROR_UNKNOWN_COMMAND,
+    COMMAND_ERROR_FUJINET
 };
 
 // command functions
 enum CommandResult cmd_time(char* tokens[], int num_tokens);
 enum CommandResult cmd_dump(char* tokens[], int num_tokens);
 enum CommandResult cmd_dir(char* tokens[], int num_tokens);
+enum CommandResult cmd_hosts(char* tokens[], int num_tokens);
 
 
 
