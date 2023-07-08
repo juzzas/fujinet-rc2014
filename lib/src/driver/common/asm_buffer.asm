@@ -300,7 +300,7 @@ do_buffer_rx_avail:
     pop de
     pop ix
 
-    ld a,
+    ld a, (buffer_fujinet_status + 2)
 
     ret
 

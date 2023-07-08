@@ -1,13 +1,5 @@
-; RC2014 PIO address 0x68 to 0x6B (using module SC103 Z80 PIO)
-;   0x68 = Port A data
-;   0x69 = Port B data
-;   0x6A = Port A control
-;   0x6B = Port B control
-
-DEFC PIO_DATA_A = 0x68
-DEFC PIO_DATA_B = 0x69
-DEFC PIO_CTRL_A = 0x6a
-DEFC PIO_CTRL_B = 0x6b
+; FujiNet prototype defaults at 0x18
+DEFC FN_CSR = 0x30
 
 DEFC MASK_CMD_RDY = 0b10000000
 DEFC MASK_PROCEED = 0b01000000
@@ -39,24 +31,12 @@ EXTERN asm_z80_delay_ms
 ;void fujinet_hal_init(void);
 
 fujinet_hal_init:
-    ld a, 0b11001111
-    out (PIO_CTRL_A), a   ;Port A = PIO 'control' mode
-    ld a, 0b00000000
-    out (PIO_CTRL_A),a    ;Port A = all lines are outputs
-
     ld a, 0b11111110
     ld (assert_val), a
-    out (PIO_DATA_A), a   ;Port A = all lines are "active low"
+    out (FN_CSR), a   ;Port A = all lines are "active low"
                           ;         with idle SPI clock
 
-
-    ld a, 0b11001111
-    out (PIO_CTRL_B), a   ;Port B = PIO 'control' mode
-    ld a, 0b11111111
-    out (PIO_CTRL_B),a    ;Port B = all lines are inputs
-
     ret
-
 
 ;;
 ;void fujinet_hal_tx(uint8_t ch);
@@ -77,11 +57,11 @@ tx_bit:
 tx_low:
     ld a, (assert_val)
     and SPI_MASK ; clock low, low MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     inc a  ; clock high, low MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     dec a  ; clock low, low MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     djnz tx_bit
 
     ;ld (assert_val), a
@@ -91,11 +71,11 @@ tx_low:
 tx_high:
     ld a, (assert_val)
     or 2  ; clock low, high MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     inc a ; clock high, high MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     dec a  ; clock low, high MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     djnz tx_bit
 
     ;ld (assert_val), a
@@ -121,9 +101,9 @@ rx_bit:
     ld a, (assert_val)
     or 3  ; clock high, high MOSI
 
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
 
-    in a, (PIO_DATA_B)
+    in a, (FN_CSR)
     and MASK_MISO
 
     jr z, miso_not_high ; if zero, skip setting bit
@@ -135,7 +115,7 @@ miso_not_high:
     ld a, (assert_val)
     and SPI_MASK
     or 2  ; clock low, high MOSI
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
 
     djnz rx_bit
 
@@ -153,14 +133,14 @@ fujinet_hal_assert_cmd:
     ld a, (assert_val)
     and 0x7f
     ld (assert_val), a
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     ret
 
 fujinet_hal_deassert_cmd:
     ld a, (assert_val)
     or 0x80
     ld (assert_val), a
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     ret
 
 ;; Assert the SPI CS line
@@ -170,7 +150,7 @@ fujinet_hal_assert_spi_cs:
     ld a, (assert_val)
     and 0b11111011
     ld (assert_val), a
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     ret
 
 fujinet_hal_deassert_spi_cs:
@@ -178,19 +158,19 @@ fujinet_hal_deassert_spi_cs:
     ld a, (assert_val)
     or 0x04
     ld (assert_val), a
-    out (PIO_DATA_A), a
+    out (FN_CSR), a
     ret
 
 
 ;; Poll the CCOMMAND_READY line
 ;  exit: A = 0, then asserted
 fujinet_hal_poll_cmd_ready:
-    in a, (PIO_DATA_B)
+    in a, (FN_CSR)
     and MASK_CMD_RDY
     ret
 
 fujinet_hal_wait_cmd_ready:
-    in a, (PIO_DATA_B)
+    in a, (FN_CSR)
     and MASK_CMD_RDY
     jr nz, fujinet_hal_wait_cmd_ready
     ret
@@ -198,7 +178,7 @@ fujinet_hal_wait_cmd_ready:
 ; ENTRY: DE = timeout in 10ths of seconds
 ; EXIT:   C-flag if timeout
 fujinet_hal_wait_cmd_ready_timeout:
-    in a, (PIO_DATA_B)
+    in a, (FN_CSR)
     and MASK_CMD_RDY    ; zero is asserted
     ret z
 
@@ -226,7 +206,7 @@ assert_val:
 SECTION code_user
 
 fujinet_poll_proceed:
-    in a, (PIO_DATA_B)
+    in a, (FN_CSR)
     and MASK_PROCEED
     jr z, proceed_asserted
 
