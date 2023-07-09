@@ -16,9 +16,9 @@ _console_init:
 ;    L = byte
 _console_tx:
     push bc
-    ld c, 2     ; CP/M 3 C_WRITE (Returns A=byte)
-    ld a, l
     push de
+    ld c, 6     ; CP/M 3 C_WRITE (Returns A=byte)
+    ld e, l
     push ix
     push iy
     call BDOS
@@ -33,17 +33,21 @@ _console_tx:
 ; exit:
 ;    L = byte
 _console_rx:
-    push bc
-    ld c, 1    ; CP/M C_READ (Returns A=byte)
-    push de
-    push ix
-    push iy
-    call BDOS
-    pop iy
-    pop ix
-    pop de
+    ld a, (last_char)
+    or a
+
+    jr nz, console_rx_1
+
+    ; else try again
+    call z, console_rx_try
+    jr _console_rx
+
+console_rx_1:
+
     ld l, a
-    pop bc
+    xor a
+    ld (last_char), a
+
     ret
 
 
@@ -51,27 +55,46 @@ _console_rx:
 ; exit:
 ;    L = number of bytes in buffer
 _console_rx_avail:
-    push bc
-    ld c, 11     ; CP/M 3 C_STATUS (Returns A=0 or 0FFh)
-    push de
-    push ix
-    push iy
-    call BDOS
-    pop iy
-    pop ix
-    pop de
+    ld a, (last_char)
+    or a
+    jr nz, rx_avail_yes
+
+    ; zero means no key waiting
+    call console_rx_try
+
+    ld a, (last_char)
     or a
     jr nz, rx_avail_yes
 
 rx_avail_no:
     ld l, 0
-    pop bc
     ret
 
 rx_avail_yes:
     ld l, 1   ; let's just say that there is only one byte.
+    ret
+
+
+console_rx_try:
+    push bc
+    push de
+    ld c, 6    ; CP/M C_READ (Returns A=byte)
+    ld e, 0xff
+
+    push ix
+    push iy
+    call BDOS
+    pop iy
+    pop ix
+
+    ld (last_char), a
+
+    pop de
     pop bc
     ret
+
+last_char:
+    DEFB 0
 
 
 _console_puts:
@@ -84,7 +107,7 @@ _console_puts:
     push hl
     push ix
     push iy
-    ld c, 2     ; CP/M 3 C_WRITE (Returns A=byte)
+    ld c, 6     ; CP/M 3 C_WRITE (Returns A=byte)
     ld e, a
     call BDOS
     pop iy
