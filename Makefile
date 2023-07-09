@@ -64,6 +64,9 @@ fnlogin:
 ptest:
 	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/printtest/printtest.lst ${LIB_FUJINET} -o ptest.com -create-app
 
+modem:
+	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/modemtest/modem.lst ${LIB_FUJINET} -o modem.com -create-app
+
 dev:
 	zcc +embedded -v -m --list -SO3 -startup=0 -clib=sdcc_iy @lib/driver_rc2014_spi.lst @apps/dev/dev.lst -o dev -lm -create-app
 
