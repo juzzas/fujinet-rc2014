@@ -8,7 +8,7 @@ PUBLIC asm_drv_aux_flush
 
 SECTION code_user
 
-DEFC MODEM_DEV_ID = 0x51
+DEFC MODEM_DEV_ID = 0x50
 
 asm_drv_aux_init:
     push ix
