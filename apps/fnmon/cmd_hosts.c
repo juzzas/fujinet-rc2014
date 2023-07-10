@@ -36,7 +36,6 @@ enum CommandResult cmd_hosts(char* tokens[], int num_tokens) {
             printf("%d: %s\n", i, host->hostname);
         }
     } else {
-        printf("Error fetching hosts.\n");
         result = COMMAND_ERROR_FUJINET;
     }
 

@@ -2,4 +2,5 @@ main.c
 cmd_dir.c
 cmd_dump.c
 cmd_hosts.c
+cmd_load.c
 cmd_time.c
