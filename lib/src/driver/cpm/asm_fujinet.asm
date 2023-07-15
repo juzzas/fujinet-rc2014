@@ -33,6 +33,7 @@ fujinet_dcb_exec:
     ld de, hl
     jp BDOS
 
+; EXIT: A = 1: asserted, 0: not asserted
 fujinet_poll_proceed:
     ld c, FNC_POLL
     jp BDOS

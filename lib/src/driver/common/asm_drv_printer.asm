@@ -48,7 +48,7 @@ asm_drv_printer_status:
 SECTION data_user
 
 ctx_printer:
-    DEFB 0, 0, 0, 0
+    DEFB 0, 0, 0, 0, 0
 
 ctx_printer_buffer:
     DEFS 64

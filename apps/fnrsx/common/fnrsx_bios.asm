@@ -38,8 +38,10 @@ EXTERN patched_sectran
 EXTERN asm_drv_printer_put_char
 EXTERN asm_drv_printer_flush
 
-EXTERN asm_drv_aux_put_char
-EXTERN asm_drv_aux_flush
+EXTERN asm_drv_aux_tx
+EXTERN asm_drv_aux_rx
+EXTERN asm_drv_aux_rx_avail
+EXTERN asm_drv_aux_tx_flush
 
 PUBLIC jumpblock_copy
 PUBLIC init_patch_bdos
@@ -192,7 +194,7 @@ patched_wboot:
 patched_conout:
     push bc
     call asm_drv_printer_flush
-    call asm_drv_aux_flush
+    call asm_drv_aux_tx_flush
     pop bc
     jp jumpblock_copy+cpm_conout
 
@@ -211,7 +213,7 @@ patched_list:
 ;;    device is. If the device isn't ready, wait until it is.
 ;;    This function is called PUNCH in CP/M 2.x, AUXOUT in CP/M 3.
 patched_auxout:
-    jp asm_drv_aux_put_char
+    jp asm_drv_aux_tx
 
 ;;------------------------------------------------------------------------------------------------------------
 ;; From seasip.info:
@@ -231,9 +233,7 @@ patched_auxost:
 ;;    in A. If this device isn't implemented, return character 26 (^Z).
 ;;    This function is called READER in CP/M 2.x, AUXIN in CP/M 3.
 patched_auxin:
-;    jp asm_drv_aux_read_char
-    ld a, 26
-    ret
+    jp asm_drv_aux_rx
 
 ;;------------------------------------------------------------------------------------------------------------
 ;; From seasip.info:
@@ -242,8 +242,7 @@ patched_auxin:
 ;;
 ;; Returns A=0 (not ready) or A=0FFh (ready).
 patched_auxist:
-    ld a, 0x0
-    ret
+    jp asm_drv_aux_rx_avail
 
 ;;------------------------------------------------------------------------
 

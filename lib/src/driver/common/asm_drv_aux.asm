@@ -1,10 +1,14 @@
 EXTERN asm_buffer_init
 EXTERN asm_buffer_tx_char
 EXTERN asm_buffer_tx_flush
+EXTERN asm_buffer_rx
+EXTERN asm_buffer_rx_avail
 
 PUBLIC asm_drv_aux_init
-PUBLIC asm_drv_aux_put_char
-PUBLIC asm_drv_aux_flush
+PUBLIC asm_drv_aux_tx
+PUBLIC asm_drv_aux_tx_flush
+PUBLIC asm_drv_aux_rx
+PUBLIC asm_drv_aux_rx_avail
 
 SECTION code_user
 
@@ -29,14 +33,15 @@ asm_drv_aux_init:
 
 ; entry:
 ;   C = character
-asm_drv_aux_put_char:
+asm_drv_aux_tx:
     push ix
     ld ix, ctx_aux_tx
     call asm_buffer_tx_char
+    call asm_buffer_tx_flush
     pop ix
     ret
 
-asm_drv_aux_flush:
+asm_drv_aux_tx_flush:
     push ix
     push hl
     ld ix, ctx_aux_tx
@@ -45,13 +50,31 @@ asm_drv_aux_flush:
     pop ix
     ret
 
+asm_drv_aux_rx:
+    push ix
+    push hl
+    ld ix, ctx_aux_rx
+    call asm_buffer_rx
+    pop hl
+    pop ix
+    ret
+
+asm_drv_aux_rx_avail:
+    push ix
+    push hl
+    ld ix, ctx_aux_rx
+    call asm_buffer_rx_avail
+    pop hl
+    pop ix
+    ret
+
 SECTION data_user
 
 ctx_aux_tx:
-    DEFB 0, 0, 0, 0
+    DEFB 0, 0, 0, 0, 0
 
 ctx_aux_rx:
-    DEFB 0, 0, 0, 0
+    DEFB 0, 0, 0, 0, 0
 
 ctx_aux_tx_buffer:
     DEFS 64
