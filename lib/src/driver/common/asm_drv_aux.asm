@@ -14,12 +14,12 @@ asm_drv_aux_init:
     push ix
 
     ld ix, ctx_aux_tx
-    ld a, PRINTER_DEV_ID
+    ld a, (ctx_aux_device_id)
     ld de, ctx_aux_tx_buffer
     call asm_buffer_init
 
     ld ix, ctx_aux_rx
-    ld a, PRINTER_DEV_ID
+    ld a, (ctx_aux_device_id)
     ld de, ctx_aux_rx_buffer
     call asm_buffer_init
 

@@ -28,7 +28,8 @@ EXTERN chain_load
 
 EXTERN asm_drv_printer_init
 EXTERN asm_drv_printer_flush
-EXTERN asm_drv_modem_flush
+EXTERN asm_drv_aux_init
+EXTERN asm_drv_aux_flush
 EXTERN handle_bdos_l_write
 
 ORG 0x100
@@ -78,7 +79,7 @@ do_init:
     call patch_bios
 
     call asm_drv_printer_init
-    ;call asm_drv_modem_init
+    call asm_drv_aux_init
 
     ld hl, log_boot
     call display_message
@@ -122,9 +123,9 @@ handle_bdos_fujinet_poll_proceed:
 
 display_char:
     push hl
-    ld c,2			;; console output function id
-    ld e,a			;; ASCII character
-    call next		;; call BDOS to execute function
+    ld c,2       ;; console output function id
+    ld e,a       ;; ASCII character
+    call next    ;; call BDOS to execute function
     pop hl
     ret
 
@@ -132,13 +133,13 @@ display_char:
 
  ;; HL = pointer to null terminated message
 display_message:
-    ld a,(hl)				;; get ASCII character
-    inc hl					;; increment pointer for next character
-    cp '$'					;; end of message marker
-    ret z					;; quit if end of message marker found.
+    ld a,(hl)      ;; get ASCII character
+    inc hl         ;; increment pointer for next character
+    cp '$'         ;; end of message marker
+    ret z          ;; quit if end of message marker found.
 
-    call display_char		;; send character to console output
-    jp display_message		;; loop for next char
+    call display_char   ;; send character to console output
+    jp display_message  ;; loop for next char
 
 log_boot:
     defb "FujiNet RSX initialised", 13, 10, "$"
