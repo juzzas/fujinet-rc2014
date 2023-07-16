@@ -2,72 +2,25 @@
  * FujiNet Login tool
  */
 
+#pragma printf = "%s"
+#pragma scanf  = "%["
+
+#include <adt.h>
 #include <stdio.h>
+#include <stropts.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
-#include "console.h"
 #include "fujinet.h"
 #include "fujinet_device.h"
 #include "fujinet_network.h"
 
+
+
 static char password_buf[256];
 static char login_buf[256];
-
-
-#define KEY_BS   0x08
-#define KEY_DELETE   127
-#define KEY_RETURN   13
-
-/**
- * Get line of input into c
- * @param prompt prompt for input
- * @param c target buffer
- * @param l Length
- * @param password echoes characters.
- */
-void input_line(char *prompt, char *c, unsigned char len, bool password)
-{
-    char i;
-    char a;
-
-    i = 0; // index into array and y-coordinate
-
-    printf("%s", prompt);
-    while(1)
-    {
-        a = console_rx(); //cgetc();
-        switch (a)
-        {
-        case KEY_BS:
-        case KEY_DELETE:
-            if (i>0)
-            {
-                c[--i] = 0;
-                putchar(0x8);
-            }
-            break;
-        case KEY_RETURN:
-            console_tx('#');
-            c[i] = 0;
-            return; // done
-            break;
-        default:
-            if (i < len) {
-                if ((a >= 32) && (a < 127)) {
-                    if (password) {
-                        console_tx('*');
-                    } else {
-                        console_tx(a);
-                    }
-                    c[i++] = a;
-                }
-            }
-            break;
-        }
-    }
-}
+b_array_t edit_buffer;
 
 int main(int argc, char **argv)
 {
@@ -80,15 +33,25 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    FUJINET_RC rc = FUJINET_RC_INVALID;
-    input_line("user: ", login_buf, 256, false);
-    printf("\n");
-    input_line("password: ", password_buf, 256, true);
+    ioctl(0, IOCTL_ITERM_GET_EDITBUF, &edit_buffer);
+
+    printf("\n=====\n\nUsername: ");
+
+    fflush(stdin);
+    scanf("%19[^\n]", login_buf);
+
+    printf("\nPassword: ");
+
+    ioctl(0, IOCTL_ITERM_PASS, 1);
+
+    fflush(stdin);
+    scanf("%19[^\n]", password_buf);
+
+    ioctl(0, IOCTL_ITERM_PASS, 0);
+
     printf("\n");
 
-    printf("login: %s [%s]", login_buf, password_buf);
-    //rc = fujinet_network_login(argv[1], login_buf, password_buf);
-    rc = fujinet_network_login(argv[1], "justin", "example");
+    FUJINET_RC rc = fujinet_network_login(argv[1], login_buf, password_buf);
     switch (rc) {
     case FUJINET_RC_OK:
         printf("done\n");
