@@ -31,6 +31,10 @@ c/fujinet_disk_get_sector_size.c
 c/fujinet_disk_read.c
 c/fujinet_disk_write.c
 
-c/fujinet_modem.c
+c/fujinet_modem_read.c
+c/fujinet_modem_status.c
+c/fujinet_modem_stream.c
+c/fujinet_modem_write.c
+
 c/fujinet_network.c
 c/fujinet_printer.c
