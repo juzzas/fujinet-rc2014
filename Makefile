@@ -4,8 +4,8 @@ CFLAGS=--max-allocs-per-node200000 -SO3 -Ilib/include
 #TARGET=+cpm -clib=sdcc_iy --max-allocs-per-node200000
 
 SUB_TARGET=-Ilib/include
-DRV_FUJINET=@lib/driver_rc2014_spi.lst
-LIB_FUJINET=@lib/driver_rc2014_cpm.lst @lib/lib_rc2014_cpm.lst
+LIB_DRV_FUJINET=-libfn_drv
+LIB_FUJINET=-llibfn_cpm -llibfujinet
 
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
@@ -35,19 +35,19 @@ libfujinet:
 	zcc ${TARGET} -v -x ${CFLAGS} @lib/lib_rc2014_cpm.lst -o libfujinet -create-app
 
 fnreset:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnreset/fnreset.lst ${LIB_FUJINET} -o fnreset.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fnreset/fnreset.lst -o fnreset.com -create-app
 
 fnwifi:
-	zcc ${TARGET} -v -m --list ${CFLAGS} -llibfn_cpm -llibfujinet @apps/fnwifi/fnwifi.lst -o fnwifi.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fnwifi/fnwifi.lst -o fnwifi.com -create-app
 
 fnpip:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnpip/fnpip.lst ${LIB_FUJINET} -o fnpip.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fnpip/fnpip.lst -o fnpip.com -create-app
 
 fnstream:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnstream/fnstream.lst ${LIB_FUJINET} -o fnstream.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fnstream/fnstream.lst -o fnstream.com -create-app
 
 fndisk:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fndisk/fndisk.lst ${LIB_FUJINET} -o fndisk.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fndisk/fndisk.lst -o fndisk.com -create-app
 
 fnrsx:
 	z88dk-z80asm -v -b -reloc-info -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -llibfn_drv -ofnrsx_driver.bin @apps/fnrsx/fnrsx_driver.lst
@@ -62,13 +62,13 @@ fnrsx22:
 	cp fnrsx22.bin fnrsx22.com
 
 fnlogin:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/fnlogin/fnlogin.lst ${LIB_FUJINET} -o fnlogin.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fnlogin/fnlogin.lst -o fnlogin.com -create-app
 
 ptest:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/printtest/printtest.lst ${LIB_FUJINET} -o ptest.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/printtest/printtest.lst -o ptest.com -create-app
 
 modem:
-	zcc ${TARGET} -v -m --list ${SUB_TARGET}  @apps/modemtest/modem.lst ${LIB_FUJINET} -o modem.com -create-app
+	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/modemtest/modem.lst -o modem.com -create-app
 
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def *.prl *.rsx *.lib
