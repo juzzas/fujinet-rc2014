@@ -102,9 +102,9 @@ patch_bios:
     ld de,patched_auxost
     call patch
 
-;    ld bc,cpm_auxin
-;    ld de,patched_auxin
-;    call patch
+    ld bc,cpm_auxin
+    ld de,patched_auxin
+    call patch
 
     ld bc,cpm_auxist
     ld de,patched_auxist
