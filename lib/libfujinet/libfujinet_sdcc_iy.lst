@@ -36,5 +36,15 @@ c/fujinet_modem_status.c
 c/fujinet_modem_stream.c
 c/fujinet_modem_write.c
 
-c/fujinet_network.c
+c/fujinet_network_channel_mode.c
+c/fujinet_network_close.c
+c/fujinet_network_json_parse.c
+c/fujinet_network_json_query.c
+c/fujinet_network_login.c
+c/fujinet_network_nunit.c
+c/fujinet_network_open.c
+c/fujinet_network_read.c
+c/fujinet_network_status.c
+c/fujinet_network_write.c
+
 c/fujinet_printer.c
