@@ -400,6 +400,12 @@ do_buffer_rx_avail:
     ; IF HL is more than DE, Z=0,C=0
     jr c, rx_avail_lt64
 
+rx_avail_64:
+    ld (ix+CTX_OFFSET_BUFFER_LEN), 64
+    ld (ix+CTX_OFFSET_BUFFER_IDX), 0
+    pop de
+    ret
+
 rx_avail_lt64:
     ld a, (buffer_fujinet_status + 0) ; grab the LSB if less that 64 bytes
     ld (ix+CTX_OFFSET_BUFFER_LEN), a
@@ -407,11 +413,6 @@ rx_avail_lt64:
     pop de
     ret
 
-rx_avail_64:
-    ld (ix+CTX_OFFSET_BUFFER_LEN), 64
-    ld (ix+CTX_OFFSET_BUFFER_IDX), 0
-    pop de
-    ret
 
 
 SECTION data_user
