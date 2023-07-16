@@ -27,7 +27,10 @@ c/fujinet_device_set_directory_position.c
 c/fujinet_device_set_ssid.c
 c/fujinet_device_umount_disk_image.c
 
-c/fujinet_disk.c
+c/fujinet_disk_get_sector_size.c
+c/fujinet_disk_read.c
+c/fujinet_disk_write.c
+
 c/fujinet_modem.c
 c/fujinet_network.c
 c/fujinet_printer.c
