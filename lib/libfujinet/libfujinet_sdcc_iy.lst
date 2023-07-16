@@ -47,4 +47,5 @@ c/fujinet_network_read.c
 c/fujinet_network_status.c
 c/fujinet_network_write.c
 
-c/fujinet_printer.c
+c/fujinet_printer_stream.c
+c/fujinet_printer_write.c
