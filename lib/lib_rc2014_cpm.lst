@@ -1,7 +1,0 @@
-src/hal/cpm_bdos/hal_console.asm
-src/fujinet.asm
-src/fujinet_device.c
-src/fujinet_disk.c
-src/fujinet_modem.c
-src/fujinet_network.c
-src/fujinet_printer.c

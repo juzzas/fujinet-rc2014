@@ -32,7 +32,7 @@ libfn_cpm:
 	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_cpm.lst -o libfn_cpm -create-app
 
 libfujinet:
-	zcc ${TARGET} -v -x ${CFLAGS} @lib/lib_rc2014_cpm.lst -o libfujinet -create-app
+	zcc ${TARGET} -v -x ${CFLAGS} @lib/libfujinet/libfujinet_sdcc_iy.lst -o libfujinet -create-app
 
 fnreset:
 	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/fnreset/fnreset.lst -o fnreset.com -create-app

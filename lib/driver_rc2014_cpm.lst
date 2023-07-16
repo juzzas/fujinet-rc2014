@@ -1,1 +1,2 @@
 src/driver/cpm/asm_fujinet.asm
+src/driver/cpm/hal_console.asm
