@@ -6,6 +6,7 @@ CFLAGS=--max-allocs-per-node200000 -SO3 -Ilib/include
 SUB_TARGET=-Ilib/include
 LIB_DRV_FUJINET=-libfn_drv
 LIB_FUJINET=-llibfn_cpm -llibfujinet
+LIB_FUJINET_ACIA=-llibfn_acia -llibfujinet
 
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
@@ -19,17 +20,20 @@ LIB_FUJINET=-llibfn_cpm -llibfujinet
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 CPU_CLOCK=7372800
 
-.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22
+.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22 fnmon
 
 all: fninit fnreset
 
-libs: libfn_drv libfn_cpm libfujinet
+libs: libfn_drv libfn_cpm libfn_acia libfujinet
 
 libfn_drv:
 	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_spi.lst -o libfn_drv -create-app
 
 libfn_cpm:
 	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_cpm.lst -o libfn_cpm -create-app
+
+libfn_acia:
+	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_acia.lst -o libfn_acia -create-app
 
 libfujinet:
 	zcc ${TARGET} -v -x ${CFLAGS} @lib/libfujinet/libfujinet_sdcc_iy.lst -o libfujinet -create-app
@@ -71,9 +75,9 @@ modem:
 	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/modemtest/modem.lst -o modem.com -create-app
 
 fnmon:
-	#zcc +z80 -startup=1 -clib=sdcc_iy -v -m --list ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/lib_rc2014_acia.lst -o fnmon -create-app 
-	#zcc +rc2014 -subtype=acia -clib=sdcc_iy -v -m --list -SO3 --max-allocs-per-node200000 ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/lib_rc2014_acia.lst -o fnmon -create-app 
-	zcc +rc2014 -subtype=acia -clib=sdcc_iy -SO3 -clib=sdcc_iy --max-allocs-per-node200000 -v -m --list ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/lib_rc2014_acia.lst -o fnmon -create-app 
+	#zcc +z80 -startup=1 -clib=sdcc_iy -v -m --list ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/driver_rc2014_acia.lst -o fnmon -create-app
+	#zcc +rc2014 -subtype=acia -clib=sdcc_iy -v -m --list -SO3 --max-allocs-per-node200000 ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/driver_rc2014_acia.lst -o fnmon -create-app
+	zcc +rc2014 -subtype=acia -clib=sdcc_iy ${CFLAGS} -v -m --list ${LIB_FUJINET_ACIA} @apps/fnmon/fnmon.lst -o fnmon -create-app
 
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def *.prl *.rsx *.lib
