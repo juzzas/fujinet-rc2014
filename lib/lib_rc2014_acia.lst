@@ -1,4 +1,4 @@
 src/hal/acia/hal_spi-rev0.asm
 src/hal/acia/hal_console.asm
-src/asm_fujinet_spi-rev0.asm
+src/driver/drv_spi-rev-0/asm_fujinet.asm
 src/fujinet.asm

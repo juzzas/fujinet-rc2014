@@ -86,7 +86,7 @@ FUJINET_RC do_file_load(uint8_t file_handle, char const* filespec, uint8_t *dest
     while(!done && rc == FUJINET_RC_OK) {
         rc = fujinet_file_status(file_handle, &status);
         if (rc == FUJINET_RC_OK) {
-            uint16_t bytes_waiting = (status.bytes_waiting_high << 8) + status.bytes_waiting_low;
+            uint16_t bytes_waiting = (status.file_size - status.file_pointer) > 512 ? 512 : (uint16_t)(status.file_size - status.file_pointer);
             if (bytes_waiting > 0) {
                 rc = fujinet_file_read(file_handle, destination, bytes_waiting);
                 if (rc == FUJINET_RC_OK) {
