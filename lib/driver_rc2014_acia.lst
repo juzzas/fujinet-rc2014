@@ -1,3 +1,2 @@
 @driver_rc2014_spi.lst
-src/driver/acia/asm_acia.asm
 src/driver/acia/hal_console.asm

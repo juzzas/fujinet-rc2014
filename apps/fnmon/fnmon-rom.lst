@@ -1,3 +1,4 @@
 rom_init.asm
 rom_rst.asm
+asm_acia.asm
 main_stub.c
