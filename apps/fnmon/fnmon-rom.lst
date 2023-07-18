@@ -1,0 +1,3 @@
+rom_init.asm
+rom_rst.asm
+main_stub.c

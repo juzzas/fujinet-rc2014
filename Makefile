@@ -20,7 +20,7 @@ LIB_FUJINET_ACIA=-llibfn_acia -llibfujinet
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 CPU_CLOCK=7372800
 
-.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22 fnmon
+.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22 fnmon fnmon-rom
 
 all: fninit fnreset
 
@@ -78,6 +78,9 @@ fnmon:
 	#zcc +z80 -startup=1 -clib=sdcc_iy -v -m --list ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/driver_rc2014_acia.lst -o fnmon -create-app
 	#zcc +rc2014 -subtype=acia -clib=sdcc_iy -v -m --list -SO3 --max-allocs-per-node200000 ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/driver_rc2014_acia.lst -o fnmon -create-app
 	zcc +rc2014 -subtype=acia -clib=sdcc_iy ${CFLAGS} -v -m --list ${LIB_FUJINET_ACIA} @apps/fnmon/fnmon.lst -o fnmon -create-app
+
+fnmon-rom:
+	zcc +embedded -startup=1 -clib=sdcc_iy ${CFLAGS} -v -m --list -pragma-include:apps/fnmon/zpragma.inc ${LIB_FUJINET_ACIA}  @apps/fnmon/fnmon-rom.lst -o fnmon-rom -create-app
 
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def *.prl *.rsx *.lib
