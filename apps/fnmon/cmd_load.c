@@ -11,6 +11,9 @@
 #include "fujinet_device.h"
 
 #include "cmd.h"
+#include "console.h"
+#include "console_utils.h"
+
 
 static struct file_status
 {
