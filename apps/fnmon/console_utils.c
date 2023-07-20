@@ -24,9 +24,7 @@ void console_put_uint8(uint8_t value) {
     }
 }
 
-void console_put_uint16_base10(uint16_t value, uint8_t leading_zero) {
-    uint16_t divisor = 10000;
-
+void console_put_common_base10(uint16_t value, uint8_t leading_zero, uint16_t divisor) {
     while (divisor > 0) {
         uint8_t digit = value / divisor;
         if (digit > 0 || !leading_zero) {
@@ -38,16 +36,10 @@ void console_put_uint16_base10(uint16_t value, uint8_t leading_zero) {
     }
 }
 
-void console_put_uint8_base10(uint8_t value, uint8_t leading_zero) {
-    uint8_t divisor = 100;
+void console_put_uint16_base10(uint16_t value, uint8_t leading_zero) {
+    console_put_common_base10(value, leading_zero, 10000);
+}
 
-    while (divisor > 0) {
-        uint8_t digit = value / divisor;
-        if (digit > 0 || !leading_zero) {
-            console_tx('0' + digit);
-            leading_zero = 0;
-        }
-        value -= digit * divisor;
-        divisor /= 10;
-    }
+void console_put_uint8_base10(uint8_t value, uint8_t leading_zero) {
+    console_put_common_base10(value, leading_zero, 100);
 }
