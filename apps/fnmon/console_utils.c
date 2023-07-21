@@ -131,7 +131,7 @@ void console_put_uint16(uint16_t value) {
     // output character for each nibble in value
     for (int nibble = 0; nibble < 4; nibble++) {
         uint8_t nibble_value = (value >> (12 - (nibble * 4))) & 0xF;
-        console_tx(nibble_value < 9 ? '0' + nibble_value : 'A' + nibble_value - 10);
+        console_tx(nibble_value <= 9 ? '0' + nibble_value : 'A' + nibble_value - 10);
     }
 }
 
@@ -139,7 +139,7 @@ void console_put_uint8(uint8_t value) {
     // output character for each nibble in value
     for (int nibble = 0; nibble < 2; nibble++) {
         uint8_t nibble_value = (value >> (4 - (nibble * 4))) & 0xF;
-        console_tx(nibble_value < 9 ? '0' + nibble_value : 'A' + nibble_value - 10);
+        console_tx(nibble_value <= 9 ? '0' + nibble_value : 'A' + nibble_value - 10);
     }
 }
 
