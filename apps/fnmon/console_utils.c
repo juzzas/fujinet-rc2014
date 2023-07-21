@@ -80,7 +80,7 @@ void console_read_line(char* buffer, int max_length) {
                     // Ignore unrecognized VT102 control sequences
                     console_rx();
                 }
-            } else if (c == 0x7F || c == '\b') { // Backspace key pressed
+            } else if (c == 0x7F || c == 0x08) { // Backspace key pressed
                 if (buffer_index > 0) {
                     // Move cursor left
                     vt102_cursor_left(1);
