@@ -75,9 +75,7 @@ modem:
 	zcc ${TARGET} -v -m --list ${CFLAGS} ${LIB_FUJINET} @apps/modemtest/modem.lst -o modem.com -create-app
 
 fnmon:
-	#zcc +z80 -startup=1 -clib=sdcc_iy -v -m --list ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/driver_rc2014_acia.lst -o fnmon -create-app
-	#zcc +rc2014 -subtype=acia -clib=sdcc_iy -v -m --list -SO3 --max-allocs-per-node200000 ${SUB_TARGET} @apps/fnmon/fnmon.lst @lib/driver_rc2014_acia.lst -o fnmon -create-app
-	zcc +rc2014 -subtype=acia -clib=sdcc_iy ${CFLAGS} -v -m --list ${LIB_FUJINET_ACIA} @apps/fnmon/fnmon.lst -o fnmon -create-app
+	zcc +rc2014 -subtype=cpm -clib=sdcc_iy ${CFLAGS} -v -m --list ${LIB_FUJINET} @apps/fnmon/fnmon.lst -o fnmon -create-app
 
 fnmon-rom:
 	zcc +embedded -startup=1 -clib=sdcc_iy ${CFLAGS} -v -m --list -pragma-include:apps/fnmon/zpragma.inc ${LIB_FUJINET_ACIA}  @apps/fnmon/fnmon-rom.lst -o fnmon-rom -create-app
