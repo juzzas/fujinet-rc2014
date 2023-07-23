@@ -34,6 +34,7 @@ Command command_list[] = {
         {"help", "Display available commands", cmd_help},
         {"dir", "Display file directory", cmd_dir},
         {"dump", "memory dump", cmd_dump},
+        {"edit", "memory edit", cmd_edit},
         {"hosts", "Display list of configured hosts", cmd_hosts},
         {"load", "Load file to memory", cmd_load},
         {"time", "Display current time", cmd_time},
