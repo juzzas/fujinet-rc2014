@@ -143,22 +143,41 @@ void console_put_uint8(uint8_t value) {
     }
 }
 
-void console_put_common_base10(uint16_t value, uint8_t leading_zero, uint16_t divisor) {
+void console_put_common_base10(uint16_t value, bool pad, uint16_t divisor) {
+    bool do_zero = pad;
     while (divisor > 0) {
         uint8_t digit = value / divisor;
-        if (digit > 0 || !leading_zero) {
+        if (digit > 0 || do_zero) {
             console_tx('0' + digit);
-            leading_zero = 0;
+            do_zero = true;
         }
         value -= digit * divisor;
         divisor /= 10;
     }
 }
 
-void console_put_uint16_base10(uint16_t value, uint8_t leading_zero) {
-    console_put_common_base10(value, leading_zero, 10000);
+void console_put_uint16_base10(uint16_t value, bool pad) {
+    console_put_common_base10(value, pad, 10000);
 }
 
-void console_put_uint8_base10(uint8_t value, uint8_t leading_zero) {
-    console_put_common_base10(value, leading_zero, 100);
+void console_put_uint8_base10(uint8_t value, bool pad) {
+    console_put_common_base10(value, pad, 100);
+}
+
+void console_puts_pad(const char* str, uint8_t padding) {
+    bool do_pad = false;
+    uint8_t i;
+    for (i=0; i < padding; i++) {
+        uint8_t ch = str[i];
+
+        if (ch == 0x00) {
+            do_pad = true;
+        }
+
+        if (do_pad) {
+            console_tx(' ');
+        } else {
+            console_tx(ch);
+        }
+    }
 }
