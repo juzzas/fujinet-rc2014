@@ -28,7 +28,7 @@ enum CommandResult cmd_dump(char* tokens[], int num_tokens) {
             console_tx((memory[index] >= ' ' && memory[index] <= '~' ? memory[index] : '.'));
         }
 
-        console_puts("\n");
+        console_puts("\r\n");
     }
 
     return COMMAND_SUCCESS;

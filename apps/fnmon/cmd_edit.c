@@ -41,7 +41,7 @@ enum CommandResult cmd_edit(char* tokens[], int num_tokens) {
             console_put_uint8(*memory);
             memory++;
         } else {
-            console_puts("ERROR\n");
+            console_puts("ERROR\r\n");
         }
 
     }

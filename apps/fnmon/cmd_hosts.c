@@ -24,6 +24,7 @@ enum CommandResult cmd_hosts(char* tokens[], int num_tokens) {
             console_put_uint8(i);
             console_puts(": ");
             console_puts(host->hostname);
+            console_puts("\r\n");
         }
     } else {
         result = COMMAND_ERROR_FUJINET;

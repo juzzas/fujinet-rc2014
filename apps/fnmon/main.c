@@ -49,7 +49,7 @@ enum CommandResult cmd_help(char* tokens[], int num_tokens) {
         console_puts(command_list[i].keyword);
         console_puts(": ");
         console_puts(command_list[i].help);
-        console_puts("\n");
+        console_puts("\r\n");
     }
 
     return COMMAND_SUCCESS;
@@ -78,7 +78,7 @@ int main() {
             console_puts("Command failed with error code: ");
             itoa(command_result, buffer, 10);
             console_puts(buffer);
-            console_puts("\n");
+            console_puts("\r\n");
         }
     }
 

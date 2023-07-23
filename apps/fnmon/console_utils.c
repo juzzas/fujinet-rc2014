@@ -123,7 +123,7 @@ void console_read_line(char* buffer, int max_length) {
     buffer[buffer_index] = '\0';
 
     // Move cursor to the next line
-    console_puts("\n");
+    console_puts("\r\n");
 }
 
 
