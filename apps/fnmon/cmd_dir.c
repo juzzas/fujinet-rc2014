@@ -21,6 +21,11 @@ FUJINET_RC do_dirlist(uint8_t host_id, char* prefix, char* filter) {
     bool done = false;
 
     rc = fujinet_open_directory(host_id, prefix, filter);
+
+    if (rc == FUJINET_RC_OK) {
+        rc = fujinet_set_directory_position(0);
+    }
+
     while(!done && rc == FUJINET_RC_OK) {
         rc = fujinet_read_directory(direntry, 44, 0x80);
         if (direntry[0] == 0x7f && direntry[1] == 0x7f) {
@@ -45,7 +50,8 @@ FUJINET_RC do_dirlist(uint8_t host_id, char* prefix, char* filter) {
                     );
              */
 
-            console_puts(name);
+            console_puts_pad((const char*)name, 40);
+            console_tx(' ');
 
             if (attribs->file_flags & DIR_ENTRY_FF_DIR) {
                 console_puts("<DIR>");
@@ -60,7 +66,7 @@ FUJINET_RC do_dirlist(uint8_t host_id, char* prefix, char* filter) {
                     console_put_uint16_base10(filesize, 0);
                 }
             }
-
+            console_puts("\r\n");
         }
     }
 
@@ -73,7 +79,7 @@ enum CommandResult cmd_dir(char* tokens[], int num_tokens)
 {
     FUJINET_RC rc = FUJINET_RC_OK;
 
-    uint8_t host_id = 1; //atoi(host);
+    uint8_t host_id = 0; //atoi(host);
     if (host_id >= FUJINET_MAX_HOST_SLOTS) {
         return COMMAND_ERROR_INVALID_ARGUMENTS;
     }
@@ -81,9 +87,9 @@ enum CommandResult cmd_dir(char* tokens[], int num_tokens)
     rc = fujinet_mount_host_slot(host_id);
     if (rc == FUJINET_RC_OK) {
         if (num_tokens == 1) {
-            rc = do_dirlist(host_id, "*.*", "");
+            rc = do_dirlist(host_id, "/", "*.*");
         } else if (num_tokens == 2) {
-            rc = do_dirlist(host_id, tokens[1], "");
+            rc = do_dirlist(host_id, tokens[1], "*.*");
         } else {
             rc = COMMAND_ERROR_INVALID_ARGUMENTS;
         }
