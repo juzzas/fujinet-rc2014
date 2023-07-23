@@ -5,4 +5,5 @@ cmd_dump.c
 cmd_edit.c
 cmd_hosts.c
 cmd_load.c
+cmd_reset.asm
 cmd_time.c

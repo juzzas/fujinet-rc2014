@@ -37,6 +37,7 @@ Command command_list[] = {
         {"edit", "memory edit", cmd_edit},
         {"hosts", "Display list of configured hosts", cmd_hosts},
         {"load", "Load file to memory", cmd_load},
+        {"reset", "Perform reboot of computer", cmd_reset},
         {"time", "Display current time", cmd_time},
         // Add more commands here
 };
