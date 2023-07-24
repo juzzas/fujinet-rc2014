@@ -22,7 +22,7 @@ enum CommandResult cmd_edit(char* tokens[], int num_tokens) {
         console_put_uint16((uint16_t)memory);
         console_puts(": ");
 
-        console_put_uint8(memory[0]);
+        console_put_uint8(*memory);
         console_puts("? ");
 
         buffer[0] = 0x00;
@@ -38,7 +38,6 @@ enum CommandResult cmd_edit(char* tokens[], int num_tokens) {
             done = true;
         } else if (isxdigit(buffer[0]) && isxdigit(buffer[1])) {
             *memory = (uint8_t)strtol(buffer, NULL, 16) & 0xff;
-            console_put_uint8(*memory);
             memory++;
         } else {
             console_puts("ERROR\r\n");
