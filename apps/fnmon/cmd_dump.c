@@ -19,12 +19,12 @@ enum CommandResult cmd_dump(char* tokens[], int num_tokens) {
         console_put_uint16(start_address + dump_index);
         console_puts(": ");
 
-        for (uint16_t index = start_address + dump_index; index < start_address + dump_index + 16; index++) {
+        for (uint16_t index = dump_index; index < dump_index + 16; index++) {
             console_put_uint8(memory[index]);
             console_tx(' ');
         }
 
-        for (uint16_t index = start_address + dump_index; index < start_address + dump_index + 16; index++) {
+        for (uint16_t index = dump_index; index < dump_index + 16; index++) {
             console_tx((memory[index] >= ' ' && memory[index] <= '~' ? memory[index] : '.'));
         }
 
