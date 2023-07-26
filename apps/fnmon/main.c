@@ -35,6 +35,7 @@ Command command_list[] = {
         {"dir", "Display file directory", cmd_dir},
         {"dump", "memory dump", cmd_dump},
         {"edit", "memory edit", cmd_edit},
+        {"hexload", "Perform hexload through console", cmd_hexload},
         {"hosts", "Display list of configured hosts", cmd_hosts},
         {"load", "Load file to memory", cmd_load},
         {"reset", "Perform reboot of computer", cmd_reset},
