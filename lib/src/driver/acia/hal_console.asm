@@ -4,7 +4,7 @@ DEFC BDOS = 0x0005
 SECTION code_user
 
 PUBLIC _console_init, _console_tx, _console_rx, _console_rx_avail, _console_puts
-EXTERN _acia_init, _acia_putc, _acia_getc, _acia_pollc
+EXTERN acia_putc, acia_getc, acia_pollc
 
 ;;Initialised the FujiNet hardware
 
@@ -16,21 +16,29 @@ _console_init:
 ; entry:
 ;    L = byte
 _console_tx:
-    jp _acia_putc
+    ld a, l
+    rst 0x08
+    ret
 
 
 ;; Input byte from Console device
 ; exit:
 ;    L = byte
 _console_rx:
-    jp _acia_getc
+    rst 0x10
+    ld h, 0
+    ld l, a
+    ret
 
 
 ;; Number of bytes available in receive buffer
 ; exit:
 ;    L = number of bytes in buffer
 _console_rx_avail:
-    jp _acia_pollc
+    rst 0x18
+    ld h, 0
+    ld l, a
+    ret
 
 
 _console_puts:

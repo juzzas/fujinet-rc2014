@@ -120,26 +120,6 @@ DEFC    serRxBuf        =     BUFSTART_RX_IO
 ; C Section
 SECTION code_user
 
-PUBLIC _acia_putc
-_acia_putc:
-    ld a, l
-    jp TXA
-
-
-PUBLIC _acia_getc
-_acia_getc:
-    call RXA
-    ld h, 0
-    ld l, a
-    ret
-
-PUBLIC _acia_pollc
-_acia_pollc:
-   ld a,(serRxBufUsed)
-   ld h, 0
-   ld l,a
-   ret
-
 
 ;==============================================================================
 ;
@@ -226,16 +206,18 @@ im1_txa_end:
 
 ;------------------------------------------------------------------------------
 ; SECTION z80_acia_rxa_chk          ; ORG $00F0
-RXA_CHK:                          ; insert directly into JumP table
+PUBLIC acia_pollc
+acia_pollc:
        ld a,(serRxBufUsed)
        ret
 
 ;------------------------------------------------------------------------------
 ;SECTION z80_acia_rxa                ; ORG $00F0
-RXA:
+PUBLIC acia_getc
+acia_getc:
         ld a,(serRxBufUsed)         ; get the number of bytes in the Rx buffer
         or a                        ; see if there are zero bytes available
-        jr Z,RXA                    ; wait, if there are no bytes available
+        jr Z,acia_getc              ; wait, if there are no bytes available
 
         cp SER_RX_EMPTYSIZE         ; compare the count with the preferred empty size
         jr NZ,rxa_clean_up          ; if the buffer is too full, don't change the RTS
@@ -266,7 +248,8 @@ rxa_clean_up:
 
 ;------------------------------------------------------------------------------
 ;SECTION z80_acia_txa                ; ORG $0120
-TXA:
+PUBLIC acia_putc
+acia_putc:
         push hl                     ; store HL so we don't clobber it
         ld l,a                      ; store Tx character
 
@@ -322,9 +305,9 @@ txa_buffer_out:
 
 
 ;------------------------------------------------------------------------------
-PUBLIC acia_init
 
 ; assume interrupts are disabled
+PUBLIC acia_init
 acia_init:
         LD HL,serRxBuf              ; Initialise Rx Buffer
         LD (serRxInPtr),HL
