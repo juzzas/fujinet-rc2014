@@ -1,13 +1,9 @@
 
-DEFC BDOS = 0x0005
-
 SECTION code_user
 
 PUBLIC _console_init, _console_tx, _console_rx, _console_rx_avail, _console_puts
-EXTERN acia_putc, acia_getc, acia_pollc
 
-;;Initialised the FujiNet hardware
-
+;;Initialised the Console hardware
 _console_init:
     ret
 

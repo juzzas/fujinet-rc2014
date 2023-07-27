@@ -1,12 +1,3 @@
-PUBLIC _z80_rst_08h
-PUBLIC _z80_rst_10h
-PUBLIC _z80_rst_38h
-
-EXTERN handle_acia_int
-EXTERN acia_putc
-EXTERN acia_getc
-EXTERN acia_getc_poll
-
 ; RST locations
 ; For convenience, because we can't easily change the ROM code interrupt routines already present in the RC2014, the ACIA serial Tx and Rx routines are reachable by calling RST instructions from your program.
 
@@ -22,16 +13,32 @@ EXTERN acia_getc_poll
 ; TODO: Move All RST xxH targets to be rewritten in a JP table originating at 0x8000 in RAM.
 ; This will allow the use of debugging tools and reorganising the efficient RST call instructions as needed.
 
+
+EXTERN handle_acia_int
+EXTERN acia_putc
+EXTERN acia_getc
+EXTERN acia_pollc
+
+
 SECTION code_user
 
 
+PUBLIC _z80_rst_08h
 _z80_rst_08h:
     jp acia_putc
 
+
+PUBLIC _z80_rst_10h
 _z80_rst_10h:
     jp acia_getc
 
 
+PUBLIC _z80_rst_18h
+_z80_rst_18h:
+    jp acia_pollc
+
+
+PUBLIC _z80_rst_38h
 _z80_rst_38h:
     di
     call handle_acia_int
