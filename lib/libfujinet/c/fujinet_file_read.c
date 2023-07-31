@@ -13,7 +13,7 @@ FUJINET_RC fujinet_file_read(uint8_t file_handle, uint8_t* buf, uint16_t len)
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x70 + file_handle;      // Fuji Device Identifier
+    dcb.device    = 0x61 + file_handle;      // Fuji Device Identifier
     dcb.command   = 'R';        // Read
     dcb.response  = buf;
     dcb.response_bytes = len;

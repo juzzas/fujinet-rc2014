@@ -8,18 +8,18 @@
 
 #define TIMEOUT 15
 
-FUJINET_RC fujinet_file_open(uint8_t file_handle, char const* filespec, uint8_t mode)
+FUJINET_RC fujinet_file_open(uint8_t file_handle, uint8_t host_id, char const* filespec, uint8_t mode)
 {
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x30 + file_handle;      // Fuji Device Identifier
+    dcb.device    = 0x61 + file_handle;      // Fuji Device Identifier
     dcb.command   = 'O';        // Open
     dcb.buffer    = (uint8_t *)filespec; // eg: MYFILE.CMD
     dcb.buffer_bytes     = 256;        // max size of our device spec
-    dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
+    dcb.timeout   = TIMEOUT;    // approximately 15 second timeout
     dcb.aux1     = mode;    // Read and write
-    dcb.aux2     = 0;      // CR/LF translation
+    dcb.aux2     = host_id;
 
     return fujinet_dcb_exec(&dcb);
 }

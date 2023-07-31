@@ -13,7 +13,7 @@ FUJINET_RC fujinet_file_close(uint8_t file_handle)
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x70 + file_handle;      // Fuji Device Identifier
+    dcb.device    = 0x61 + file_handle;      // Fuji Device Identifier
     dcb.command   = 'C';        // Close
     dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
 

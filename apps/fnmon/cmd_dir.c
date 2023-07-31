@@ -89,7 +89,7 @@ enum CommandResult cmd_dir(char* tokens[], int num_tokens)
         if (num_tokens == 1) {
             rc = do_dirlist(host_id, "/", "*.*");
         } else if (num_tokens == 2) {
-            rc = do_dirlist(host_id, tokens[1], "*.*");
+            rc = do_dirlist(host_id, "/", tokens[1]);
         } else {
             rc = COMMAND_ERROR_INVALID_ARGUMENTS;
         }

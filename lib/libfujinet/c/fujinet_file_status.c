@@ -13,7 +13,7 @@ FUJINET_RC fujinet_file_status(uint8_t file_handle, struct file_status *status)
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x70 + file_handle;      // Fuji Device Identifier
+    dcb.device    = 0x61 + file_handle;      // Fuji Device Identifier
     dcb.command   = 'S';        // Status
     dcb.response  = (uint8_t *)status;
     dcb.response_bytes     = sizeof(struct file_status);

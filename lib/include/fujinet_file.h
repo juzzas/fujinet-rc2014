@@ -27,12 +27,13 @@ static struct file_status
  * Open device with handle
  *
  * @param file_handle - a file device handle to use
+ * @param host_id - the index of host to use
  * @param filespec - path of file to open
- * @param mode mode, 0=none, 1=cr, 2=lf, 3=cr/lf
+ * @param mode mode, OREAD/OWRITE/OUPDATE
  *
  * @return FUJINET_RC_OK on success, else error
  */
-FUJINET_RC fujinet_file_open(uint8_t file_handle, char const* filespec, uint8_t mode);
+FUJINET_RC fujinet_file_open(uint8_t file_handle, uint8_t host_id, char const* filespec, uint8_t mode);
 
 /**
  * Close file device with handle
