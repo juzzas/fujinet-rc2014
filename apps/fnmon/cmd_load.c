@@ -35,17 +35,14 @@ FUJINET_RC do_file_load(uint8_t file_handle, uint8_t host_id, char const* filesp
     while(!done && rc == FUJINET_RC_OK) {
         rc = fujinet_file_status(file_handle, &status);
         if (rc == FUJINET_RC_OK) {
-            console_puts("filesize ");
-            console_put_uint16((uint16_t)(status.file_size & 0xffff));
-            console_puts("filepointer ");
+            console_puts("Reading &");
             console_put_uint16((uint16_t)(status.file_pointer & 0xffff));
-            console_puts("\r\n");
+            console_puts(" / &");
+            console_put_uint16((uint16_t)(status.file_size & 0xffff));
+            console_puts("\r");
 
             uint16_t bytes_waiting = (status.file_size - status.file_pointer) > 512 ? 512 : (uint16_t)(status.file_size - status.file_pointer);
             if (bytes_waiting > 0) {
-                console_puts("Reading ");
-                console_put_uint16(bytes_waiting);
-                console_puts("\r\n");
                 rc = fujinet_file_read(file_handle, destination, bytes_waiting);
                 if (rc == FUJINET_RC_OK) {
                     destination += bytes_waiting;
@@ -57,6 +54,7 @@ FUJINET_RC do_file_load(uint8_t file_handle, uint8_t host_id, char const* filesp
     }
 
     rc = fujinet_file_close(file_handle);
+    console_puts("\r\n");
 
     return rc;
 }
