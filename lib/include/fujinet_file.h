@@ -17,8 +17,7 @@ static struct file_status
 {
     uint8_t file_status;
     uint8_t file_error_code;
-    uint32_t file_size;
-    uint32_t file_pointer;
+    uint32_t available;
 };
 
 #define MAX_FILE_HANDLE 8
