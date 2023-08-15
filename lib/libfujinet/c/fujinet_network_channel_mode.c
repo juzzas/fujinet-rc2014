@@ -8,15 +8,13 @@
 
 #define TIMEOUT 30000 /* approx 30 seconds */
 
-extern unsigned char nunit(char* devicespec);
 
-FUJINET_RC fujinet_channel_mode(char* devicespec, uint8_t mode)
+FUJINET_RC fujinet_channel_mode(uint8_t network_unit, uint8_t mode)
 {
     struct fujinet_dcb dcb;
-    unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+    dcb.device    = 0x71 + network_unit;      // Fuji Device Identifier
     dcb.command   = 0xFC;        // set channel mode
     dcb.timeout   = TIMEOUT;    // approximately 30 second timeout
     dcb.aux1     = OUPDATE;    // Read and write

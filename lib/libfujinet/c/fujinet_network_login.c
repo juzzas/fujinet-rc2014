@@ -8,12 +8,10 @@
 
 #define TIMEOUT 30000 /* approx 30 seconds */
 
-extern unsigned char nunit(char* devicespec);
 
-FUJINET_RC fujinet_network_login(char* devicespec, char* login, char* password)
+FUJINET_RC fujinet_network_login(uint8_t network_unit, char* login, char* password)
 {
     struct fujinet_dcb dcb;
-    unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
     uint16_t login_len = 0;
     uint16_t password_len = 0;
@@ -24,7 +22,7 @@ FUJINET_RC fujinet_network_login(char* devicespec, char* login, char* password)
     if (password)
         password_len = strlen(password);
 
-    dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+    dcb.device    = 0x71 + network_unit;      // Fuji Device Identifier
     dcb.command   = 0xFD;        // send login
     dcb.buffer  = login_len > 0 ? (uint8_t*)login : NULL;
     dcb.buffer_bytes = login_len < 255 ? login_len : 255 ;
@@ -34,7 +32,7 @@ FUJINET_RC fujinet_network_login(char* devicespec, char* login, char* password)
     FUJINET_RC rc = fujinet_dcb_exec(&dcb);
     if (rc == FUJINET_RC_OK) {
         memset(&dcb, 0, sizeof(struct fujinet_dcb));
-        dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+        dcb.device    = 0x71 + network_unit;      // Fuji Device Identifier
         dcb.command   = 0xFE;        // send password
         dcb.buffer  = password_len > 0 ? (uint8_t*)password : NULL;
         dcb.buffer_bytes = password_len < 255 ? password_len : 255;

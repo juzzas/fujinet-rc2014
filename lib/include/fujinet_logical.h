@@ -1,0 +1,15 @@
+//
+// Created by jskists on 02/08/2023.
+//
+
+#ifndef FUJINET_LOGICAL_H
+#define FUJINET_LOGICAL_H
+
+enum fujinet_logical_device_type {
+    FUJINET_LOGICAL_DEVICE_TYPE_UNKNOWN = 0,
+    FUJINET_LOGICAL_DEVICE_TYPE_NETWORK = 1,
+    FUJINET_LOGICAL_DEVICE_TYPE_DISK = 2,
+    FUJINET_LOGICAL_DEVICE_TYPE_PRINTER = 3,
+};
+
+#endif //FUJINET_LOGICAL_H

@@ -8,15 +8,13 @@
 
 #define TIMEOUT 30000 /* approx 30 seconds */
 
-extern unsigned char nunit(char* devicespec);
 
-FUJINET_RC fujinet_json_query(char* devicespec, uint8_t* buf, uint16_t len)
+FUJINET_RC fujinet_json_query(uint8_t network_unit, uint8_t* buf, uint16_t len)
 {
     struct fujinet_dcb dcb;
-    unsigned char unit = nunit(devicespec);
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x70 + unit;      // Fuji Device Identifier
+    dcb.device    = 0x71 + network_unit;      // Fuji Device Identifier
     dcb.command   = 'Q';        // Query
     dcb.buffer    = buf; // eg: N:TCP//
     dcb.buffer_bytes     = 256;        // max size of our device spec
