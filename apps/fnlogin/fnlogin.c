@@ -14,6 +14,7 @@
 
 #include "fujinet.h"
 #include "fujinet_device.h"
+#include "fujinet_logical.h"
 #include "fujinet_network.h"
 
 
@@ -30,6 +31,11 @@ int main(int argc, char **argv)
 
     if (argc == 1) {
         printf("Usage: fnlogin <DEVICE SPEC>\n");
+        exit(1);
+    }
+
+    if (fujinet_logical_device_type(argv[1]) != FUJINET_LOGICAL_DEVICE_TYPE_NETWORK) {
+        printf("Invalid device spec\n");
         exit(1);
     }
 
@@ -51,7 +57,8 @@ int main(int argc, char **argv)
 
     printf("\n");
 
-    FUJINET_RC rc = fujinet_network_login(argv[1], login_buf, password_buf);
+    FUJINET_RC rc = fujinet_network_login(fujinet_logical_device_unit(argv[1]),
+                                          login_buf, password_buf);
     switch (rc) {
     case FUJINET_RC_OK:
         printf("done\n");

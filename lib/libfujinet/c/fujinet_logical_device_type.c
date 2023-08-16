@@ -2,9 +2,11 @@
 // Created by jskists on 02/08/2023.
 //
 #include <ctype.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include "fujinet_logical.h"
 
-uint8_t fujinet_logical_device_to_type(char const* logical)
+FUJINET_LOGICAL_DEVICE_TYPE fujinet_logical_device_type(char const* logical)
 {
     if (logical == NULL) {
         return FUJINET_LOGICAL_DEVICE_TYPE_UNKNOWN;
@@ -17,7 +19,7 @@ uint8_t fujinet_logical_device_to_type(char const* logical)
     bool is_colon3 = logical[3] == ':';
     bool is_colon4 = logical[4] == ':';
 
-    if ((is_digit3 && is_colon4) || (is_colon4) {
+    if ((is_digit3 && is_colon4) || (is_colon4)) {
         if (chr0 == 'N' && chr1 == 'E' && chr2 == 'T') {
             return FUJINET_LOGICAL_DEVICE_TYPE_NETWORK;
         }

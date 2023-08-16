@@ -31,6 +31,10 @@ c/fujinet_disk_get_sector_size.c
 c/fujinet_disk_read.c
 c/fujinet_disk_write.c
 
+c/fujinet_logical_device_type.c
+c/fujinet_logical_device_unit.c
+c/fujinet_logical_device_url.c
+
 c/fujinet_modem_read.c
 c/fujinet_modem_status.c
 c/fujinet_modem_stream.c
@@ -41,7 +45,6 @@ c/fujinet_network_close.c
 c/fujinet_network_json_parse.c
 c/fujinet_network_json_query.c
 c/fujinet_network_login.c
-c/fujinet_network_nunit.c
 c/fujinet_network_open.c
 c/fujinet_network_read.c
 c/fujinet_network_status.c

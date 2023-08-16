@@ -6,16 +6,24 @@
 #define FUJI_TYPEDEFS_H
 
 #define FILE_MAXLEN 36
-#define SSID_MAXLEN 32 /* 32 + NULL */
+#define SSID_MAXLEN 33 /* 32 + NULL */
 
 #define MODE_READ 1
 #define MODE_WRITE 2
 
-#define FUJINET_MAX_HOST_SLOTS    8
-#define FUJINET_MAX_DEVICE_SLOTS  8
+#define MAX_HOST_LEN 32
+#define NUM_HOST_SLOTS 8
+
+typedef enum _entry_types
+{
+  ENTRY_TYPE_TEXT,
+  ENTRY_TYPE_FOLDER,
+  ENTRY_TYPE_FILE,
+  ENTRY_TYPE_LINK,
+  ENTRY_TYPE_MENU
+} EntryType;
 
 typedef unsigned short DirectoryPosition;
-
 
 /**
  * Returned info for a single SSID entry
@@ -51,9 +59,7 @@ typedef struct
   char fn_version[15];
 } AdapterConfig;
 
-typedef struct {
-  unsigned char hostname[32];
-} HostSlot;
+typedef unsigned char HostSlot[32];
 
 typedef struct {
   unsigned char hostSlot;
