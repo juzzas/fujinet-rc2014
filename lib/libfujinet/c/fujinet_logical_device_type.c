@@ -19,7 +19,7 @@ FUJINET_LOGICAL_DEVICE_TYPE fujinet_logical_device_type(char const* logical)
     bool is_colon3 = logical[3] == ':';
     bool is_colon4 = logical[4] == ':';
 
-    if ((is_digit3 && is_colon4) || (is_colon4)) {
+    if ((is_digit3 && is_colon4) || (is_colon3)) {
         if (chr0 == 'N' && chr1 == 'E' && chr2 == 'T') {
             return FUJINET_LOGICAL_DEVICE_TYPE_NETWORK;
         }

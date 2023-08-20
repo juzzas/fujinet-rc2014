@@ -94,7 +94,6 @@ int main(int argc, char **argv)
 
     if (argc == 1) {
         printf("Usage: FNPIP <DEST>=<SRC#1>,<SRC#2>,...,<SRC#N>\n");
-        printf("Fujinet-PIP: TCP UDP TELNET HTTP/S TNFS FTP\n\nSPEC's are of the form:\n\nN:PROTO://host.name:port/path?key=val&key=val\n\nExamples of URL's:\n------------------\nN:TELNET://BBS.FOZZTEXX.NET:23/\nN:HTTPS://www.gnu.org/licenses/gpl-3.0.txt\n\n");
         exit(1);
     }
 
@@ -167,7 +166,7 @@ int main(int argc, char **argv)
             }
 
             if (src_type == DEVICE_FN) {
-                fujinet_network_close(src_drivespec);
+                fujinet_network_close(src_logical_unit);
             }
 
             src = strtok(NULL, ",");
