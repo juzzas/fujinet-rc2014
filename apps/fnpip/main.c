@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "console.h"
 #include "fcb.h"
+#include "fujinet_logical.h"
 #include "fujinet_network.h"
 
 struct cpm_fcb fcb_input;
@@ -27,6 +28,9 @@ char buffer[256];
 char src_drivespec[256];
 const char* src;
 DEVICE_TYPE src_type = DEVICE_UNKNOWN;
+FUJINET_LOGICAL_DEVICE_TYPE src_logical_type = FUJINET_LOGICAL_DEVICE_TYPE_UNKNOWN;
+uint8_t src_logical_unit = 0;
+const char* src_logical_url = NULL;
 const char* dest;
 DEVICE_TYPE dest_type = DEVICE_UNKNOWN;
 uint16_t src_size = 0;
@@ -34,7 +38,7 @@ uint16_t src_size = 0;
 
 int in_fujinet(void)
 {
-    FUJINET_RC rc = fujinet_network_status(src, &status);
+    FUJINET_RC rc = fujinet_network_status(src_logical_unit, &status);
 
     if (status.extended_error != 1) {
         printf("extended error: %d\n", status.extended_error);
@@ -50,7 +54,7 @@ int in_fujinet(void)
         if (l > 0) {
             uint16_t read_l = l > 128 ? 128 : l;
 
-            rc = fujinet_network_read(src, buffer, read_l);
+            rc = fujinet_network_read(src_logical_unit, buffer, read_l);
             if (rc == FUJINET_RC_OK) {
                 src_size += read_l;
                 //printf("\rread %u bytes", src_size);
@@ -90,7 +94,6 @@ int main(int argc, char **argv)
 
     if (argc == 1) {
         printf("Usage: FNPIP <DEST>=<SRC#1>,<SRC#2>,...,<SRC#N>\n");
-        printf("Fujinet-PIP: TCP UDP TELNET HTTP/S TNFS FTP\n\nSPEC's are of the form:\n\nN:PROTO://host.name:port/path?key=val&key=val\n\nExamples of URL's:\n------------------\nN:TELNET://BBS.FOZZTEXX.NET:23/\nN:HTTPS://www.gnu.org/licenses/gpl-3.0.txt\n\n");
         exit(1);
     }
 
@@ -113,15 +116,17 @@ int main(int argc, char **argv)
 
     src = strtok(NULL, ",");
     if (src != NULL) {
-        while (src != NULL) {
+        while (src != NULL && fujinet_logical_device_type(src) == FUJINET_LOGICAL_DEVICE_TYPE_NETWORK) {
+            src_logical_type = fujinet_logical_device_type(src);
+            src_logical_unit = fujinet_logical_device_unit(src);
+            src_logical_url = fujinet_logical_device_url(src);
             printf("SRC URI: %s\n", src);
 
-            if ((strncmp(src, "HTTP:", 5) == 0) ||
-                    (strncmp(src, "HTTPS:", 6) == 0) ||
-                    (strncmp(src, "FTP:", 4) == 0)) {
-                sprintf(src_drivespec, "N1:%s", src);
-                printf("OPEN DRIVESPEC: %s\n", src_drivespec);
-                printf("OPEN RETURN: %02X\n", fujinet_network_open(src_drivespec, 0));
+            if ((strncmp(src_logical_url, "HTTP:", 5) == 0) ||
+                    (strncmp(src_logical_url, "HTTPS:", 6) == 0) ||
+                    (strncmp(src_logical_url, "FTP:", 4) == 0)) {
+                printf("OPEN DRIVESPEC: %s\n", src);
+                printf("OPEN RETURN: %02X\n", fujinet_network_open(src_logical_unit, src_logical_url, 0));
                 src_type = DEVICE_FN;
             }
             else
@@ -161,7 +166,7 @@ int main(int argc, char **argv)
             }
 
             if (src_type == DEVICE_FN) {
-                fujinet_network_close(src_drivespec);
+                fujinet_network_close(src_logical_unit);
             }
 
             src = strtok(NULL, ",");
