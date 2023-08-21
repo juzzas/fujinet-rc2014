@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "console.h"
 #include "fcb.h"
+#include "fujinet.h"
 #include "fujinet_logical.h"
 #include "fujinet_network.h"
 
