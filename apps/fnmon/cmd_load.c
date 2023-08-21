@@ -63,7 +63,7 @@ enum CommandResult cmd_load(char* tokens[], int num_tokens)
     FUJINET_RC rc;
 
     uint8_t host_id = 0; //atoi(host);
-    if (host_id >= FUJINET_MAX_HOST_SLOTS) {
+    if (host_id >= NUM_HOST_SLOTS) {
         return COMMAND_ERROR_INVALID_ARGUMENTS;
     }
 
