@@ -12,7 +12,7 @@ FUJINET_RC fujinet_get_ssid(NetConfig *nc)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xFE;
     dcb.response = (uint8_t *)nc;
     dcb.response_bytes = sizeof(NetConfig);

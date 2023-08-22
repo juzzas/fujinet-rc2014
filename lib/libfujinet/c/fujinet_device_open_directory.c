@@ -28,7 +28,7 @@ FUJINET_RC fujinet_open_directory(unsigned char hs, char *p, char *f)
         strcpy(e,f);
     }
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xF7;
     dcb.buffer = (uint8_t *)open_dir_buffer;
     dcb.buffer_bytes = 256;

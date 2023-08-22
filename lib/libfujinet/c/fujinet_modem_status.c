@@ -3,6 +3,7 @@
 //
 
 #include "fujinet.h"
+#include "fujinet_device.h"
 #include "fujinet_modem.h"
 
 #include <string.h>
@@ -16,7 +17,7 @@ FUJINET_RC fujinet_modem_status(uint8_t modem_unit, struct modem_status *status)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x50 + modem_unit;      // Fuji Device Identifier
+    dcb.device    = RC2014_DEVICEID_MODEM + modem_unit;      // Fuji Device Identifier
     dcb.command   = 'S';        // Status
     dcb.response  = (uint8_t *)status;
     dcb.response_bytes     = sizeof(struct modem_status);

@@ -10,7 +10,7 @@ FUJINET_RC fujinet_get_wifi_status(uint8_t *status)
 {
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xFA; // Get WiFi Status
     dcb.aux1 = 0;
     dcb.aux2 = 0;

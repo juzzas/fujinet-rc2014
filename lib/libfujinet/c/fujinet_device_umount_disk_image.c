@@ -13,7 +13,7 @@ FUJINET_RC fujinet_umount_disk_image(uint8_t ds)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xE9;
     dcb.timeout = 15;
     dcb.aux1 = ds;

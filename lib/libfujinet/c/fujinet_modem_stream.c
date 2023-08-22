@@ -3,6 +3,7 @@
 //
 
 #include "fujinet.h"
+#include "fujinet_device.h"
 #include "fujinet_modem.h"
 
 #include <string.h>
@@ -17,7 +18,7 @@ FUJINET_RC fujinet_modem_stream(uint8_t modem_unit)
     if (modem_unit > MAX_MODEM_UNIT)
         return FUJINET_RC_INVALID;
 
-    dcb.device = 0x50 + modem_unit;
+    dcb.device = RC2014_DEVICEID_MODEM + modem_unit;
     dcb.command = 'X';
     dcb.timeout = FUJINET_TIMEOUT;
 

@@ -3,6 +3,7 @@
 //
 
 #include "fujinet.h"
+#include "fujinet_device.h"
 #include "fujinet_printer.h"
 
 #include <string.h>
@@ -14,7 +15,7 @@ FUJINET_RC fujinet_printer_write(uint8_t unit, uint8_t* buf, uint16_t len)
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x40 + unit;      // Fuji Device Identifier
+    dcb.device = RC2014_DEVICEID_PRINTER + unit;
     dcb.command   = 'W';        // Write
     dcb.buffer  = buf;
     dcb.buffer_bytes = len;

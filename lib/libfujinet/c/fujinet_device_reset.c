@@ -12,7 +12,7 @@ FUJINET_RC fujinet_device_reset(void)
     struct fujinet_dcb dcb;
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xFF; // reset FujiNet device
     dcb.aux1 = 0;
     dcb.aux2 = 0;

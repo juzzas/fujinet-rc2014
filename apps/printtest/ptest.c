@@ -28,10 +28,10 @@ int main(int argc, char **argv)
 #if 0
     FUJINET_RC rc = FUJINET_RC_INVALID;
 
-    rc = fujinet_printer_write(1, "Hello!\n\r", 8);
-    rc = fujinet_printer_write(1, "Justin!\n\r", 8);
-    rc = fujinet_printer_write(1, "123\n456\n\r", 9);
-    rc = fujinet_printer_write(1, "end\n\r", 5);
+    rc = fujinet_printer_write(0, "Hello!\n\r", 8);
+    rc = fujinet_printer_write(0, "Justin!\n\r", 8);
+    rc = fujinet_printer_write(0, "123\n456\n\r", 9);
+    rc = fujinet_printer_write(0, "end\n\r", 5);
 #endif
 
     int rc = cpm_bdos(0x5, 65);

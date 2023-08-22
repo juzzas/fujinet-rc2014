@@ -13,7 +13,7 @@ FUJINET_RC fujinet_get_device_slots(DeviceSlot *d)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xF2;
     dcb.response = (uint8_t *)d;
     dcb.response_bytes = sizeof(DeviceSlot) * 8;

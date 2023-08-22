@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "fujinet_device.h"
 #include "fujinet_network.h"
 
 #define TIMEOUT 30000 /* approx 30 seconds */
@@ -14,7 +15,7 @@ FUJINET_RC fujinet_network_status(uint8_t network_unit, struct network_status *s
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x71 + network_unit;      // Fuji Device Identifier
+    dcb.device    = RC2014_DEVICEID_NETWORK + network_unit;      // Fuji Device Identifier
     dcb.command   = 'S';        // Status
     dcb.response  = (uint8_t *)status;
     dcb.response_bytes     = sizeof(struct network_status);

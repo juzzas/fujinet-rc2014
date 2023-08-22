@@ -12,7 +12,7 @@ FUJINET_RC fujinet_get_scan_result(uint8_t n, SSIDInfo *info)
     struct fujinet_dcb dcb;
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xFC; // Scan for networks
     dcb.aux1 = n;
     dcb.aux2 = 0;

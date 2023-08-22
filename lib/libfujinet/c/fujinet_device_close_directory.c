@@ -13,7 +13,7 @@ FUJINET_RC fujinet_close_directory(void)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xF5;
     dcb.timeout = FUJINET_TIMEOUT;
 

@@ -13,7 +13,7 @@ FUJINET_RC fujinet_set_device_filename(uint8_t ds, char* e)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xE2;
     dcb.timeout = 15;
     dcb.buffer = (uint8_t *)e;

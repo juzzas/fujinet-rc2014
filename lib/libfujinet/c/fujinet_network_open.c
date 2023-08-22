@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "fujinet_device.h"
 #include "fujinet_network.h"
 
 #define TIMEOUT 30000 /* approx 30 seconds */
@@ -14,7 +15,7 @@ FUJINET_RC fujinet_network_open(uint8_t network_unit, const char* url, uint8_t t
     struct fujinet_dcb dcb;
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device    = 0x71 + network_unit;      // Fuji Device Identifier
+    dcb.device    = RC2014_DEVICEID_NETWORK + network_unit;      // Fuji Device Identifier
     dcb.command   = 'O';        // Open
     dcb.buffer    = (uint8_t *)url; // eg: TCP//
     dcb.buffer_bytes     = 256;        // max size of our device spec

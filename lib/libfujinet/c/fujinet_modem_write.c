@@ -3,6 +3,7 @@
 //
 
 #include "fujinet.h"
+#include "fujinet_device.h"
 #include "fujinet_modem.h"
 
 #include <string.h>
@@ -17,7 +18,7 @@ FUJINET_RC fujinet_modem_write(uint8_t modem_unit, uint8_t* buf, uint16_t len)
     if (modem_unit > MAX_MODEM_UNIT)
         return FUJINET_RC_INVALID;
 
-    dcb.device    = 0x50 + modem_unit;      // Fuji Device Identifier
+    dcb.device    = RC2014_DEVICEID_MODEM + modem_unit;      // Fuji Device Identifier
     dcb.command   = 'W';        // Write
     dcb.buffer  = buf;
     dcb.buffer_bytes = len;

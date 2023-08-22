@@ -13,7 +13,7 @@ FUJINET_RC fujinet_get_adapter_config(AdapterConfig *ac)
 
     memset(&dcb, 0, sizeof(struct fujinet_dcb));
 
-    dcb.device = 0x70;
+    dcb.device = RC2014_DEVICEID_FUJINET;
     dcb.command = 0xE8; // Get adaptor config
     dcb.timeout = FUJINET_TIMEOUT;
     dcb.response = (uint8_t *)ac;
