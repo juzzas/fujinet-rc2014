@@ -16,7 +16,7 @@
 #include "console_utils.h"
 
 
-#define FILE_HANDLE 1
+#define FILE_HANDLE 0
 
 static struct file_status status;
 
