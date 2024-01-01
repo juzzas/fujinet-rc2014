@@ -20,7 +20,7 @@ LIB_FUJINET_ACIA=-llibfn_acia -llibfujinet
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 CPU_CLOCK=7372800
 
-.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22 fnmon fnmon-rom
+.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22 fnmon fnmon-rom camelforth
 
 all: fninit fnreset
 
@@ -79,6 +79,11 @@ fnmon:
 
 fnmon-rom:
 	zcc +embedded -startup=1 -clib=sdcc_iy ${CFLAGS} -v -m --list -pragma-include:apps/fnmon/zpragma.inc ${LIB_FUJINET_ACIA}  @apps/fnmon/fnmon-rom.lst -o fnmon-rom -create-app
+
+camelforth:
+	z88dk-z80asm -b -v -l -s -m -g -D__CPU_CLOCK=${CPU_CLOCK} -llibfn_drv -ofncamelforth.bin @camelforth/camelforth_drv.lst
+	z88dk-appmake +hex -v --org=0xf800 -b fncamelforth.bin
+#	zcc +embedded -subytpe=none --no-crt -clib=sdcc_iy ${CFLAGS} -D__CPU_CLOCK=${CPU_CLOCK} -llibfn_drv @camelforth/camelforth_drv.lst -o camelforth_drv -create-app -Cz"--org 0xf800 --ihex"
 
 clean:
 	rm -f *.dsk *.map *.bin *.ihx *.com *.COM *.reloc *.def *.prl *.rsx *.lib
