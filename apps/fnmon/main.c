@@ -38,9 +38,9 @@ Command command_list[] = {
         {"hexload", "Perform hexload through console", cmd_hexload},
         {"hosts", "Display list of configured hosts", cmd_hosts},
         {"load", "Load file to memory", cmd_load},
+        {"save", "Save memory to file", cmd_save},
         {"reset", "Perform reboot of computer", cmd_reset},
         {"time", "Display current time", cmd_time},
-        // Add more commands here
 };
 
 

@@ -7,4 +7,5 @@ cmd_hexload.asm
 cmd_hosts.c
 cmd_load.c
 cmd_reset.asm
+cmd_save.c
 cmd_time.c

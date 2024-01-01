@@ -16,14 +16,15 @@ enum CommandResult {
 };
 
 // command functions
-enum CommandResult cmd_time(char* tokens[], int num_tokens);
 enum CommandResult cmd_dump(char* tokens[], int num_tokens);
-enum CommandResult cmd_edit(char* tokens[], int num_tokens);
 enum CommandResult cmd_dir(char* tokens[], int num_tokens);
+enum CommandResult cmd_edit(char* tokens[], int num_tokens);
 enum CommandResult cmd_hexload(char* tokens[], int num_tokens);
 enum CommandResult cmd_hosts(char* tokens[], int num_tokens);
 enum CommandResult cmd_load(char* tokens[], int num_tokens);
 enum CommandResult cmd_reset(char* tokens[], int num_tokens);
+enum CommandResult cmd_save(char* tokens[], int num_tokens);
+enum CommandResult cmd_time(char* tokens[], int num_tokens);
 
 
 #endif //FNMON_CMD_H
