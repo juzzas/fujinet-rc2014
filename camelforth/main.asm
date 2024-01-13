@@ -31,6 +31,7 @@ do_FUJINET_DCB:
     call fujinet_dcb_exec
     ld c, a
     ld b, 0
+    rst 0x20
     ret
 
 ; xx06 FUJINET_POLL
