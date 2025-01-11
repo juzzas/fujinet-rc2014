@@ -1,3 +1,7 @@
+# Select driver target
+BUS_TARGET=spi-rev0
+#BUS_TARGET=spi-sc103
+
 #TARGET=+cpm
 TARGET=+rc2014 -subtype=cpm -clib=sdcc_iy
 CFLAGS=--max-allocs-per-node200000 -SO3 -Ilib/include
@@ -6,7 +10,7 @@ CFLAGS=--max-allocs-per-node200000 -SO3 -Ilib/include
 SUB_TARGET=-Ilib/include
 LIB_DRV_FUJINET=-libfn_drv
 LIB_FUJINET=-llibfn_cpm -llibfujinet
-LIB_FUJINET_ACIA=-llibfn_acia -llibfujinet
+LIB_FUJINET_ACIA=-llibfn_drv -llibfn_acia -llibfujinet
 
 #TARGET=+rc2014 -subtype=hbios @hal/hal_rc2014_hbios.lst
 #TARGET=+rc2014 -subtype=acia @hal/hal_rc2014_acia.lst
@@ -20,14 +24,17 @@ LIB_FUJINET_ACIA=-llibfn_acia -llibfujinet
 # -subtype=basic     Uses MODE 1 from a BASIC environment (this subtype has much reduced functionality and use isn't recommended).
 CPU_CLOCK=7372800
 
-.PHONY: all clean libs fnreset fnwifi fnpip fnrsx fnrsx22 fnmon fnmon-rom
+.PHONY: all clean libs apps 
 
-all: fninit fnreset
+all: libs apps
 
 libs: libfn_drv libfn_cpm libfn_acia libfujinet
+apps: fnreset fnwifi fnpip fnstream fnrsx fnmon fnmon-rom
+
+
 
 libfn_drv:
-	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_spi.lst -o libfn_drv -create-app
+	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_${BUS_TARGET}.lst -o libfn_drv -create-app
 
 libfn_cpm:
 	zcc ${TARGET} -v -x ${CFLAGS} @lib/driver_rc2014_cpm.lst -o libfn_cpm -create-app

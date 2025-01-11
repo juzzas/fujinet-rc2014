@@ -1,5 +1,5 @@
 src/driver/bus_spi-rev0/driver.asm
-src/driver/bus_spi-rev0/asm_fujinet.asm
+src/driver/bus_spi-common/asm_fujinet.asm
 src/driver/common/asm_buffer.asm
 src/driver/common/asm_drv_printer.asm
 src/driver/common/asm_drv_aux.asm
